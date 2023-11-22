@@ -184,4 +184,9 @@
 		</profile>
 	</profiles>
 
+	<modules>
+		<module>stats/statApi</module>
+		<module>stats/gateway</module>
+	</modules>
+
 </project>
