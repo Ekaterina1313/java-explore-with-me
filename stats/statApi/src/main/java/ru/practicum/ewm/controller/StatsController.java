@@ -33,8 +33,9 @@ public class StatsController {
             @RequestParam(value = "uris", required = false) List<String> uris,
             @RequestParam(value = "unique", defaultValue = "false") boolean unique
     ) {
-        LocalDateTime startTime = LocalDateTime.parse(start, DateTimeFormatter.ISO_DATE_TIME);
-        LocalDateTime endTime = LocalDateTime.parse(end, DateTimeFormatter.ISO_DATE_TIME);
+        DateTimeFormatter newFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startTime = LocalDateTime.parse(start, newFormatter);
+        LocalDateTime endTime = LocalDateTime.parse(end, newFormatter);
 
         List<ViewStats> statistics = statsService.getStats(startTime, endTime, uris, unique);
         return ResponseEntity.ok(statistics);
