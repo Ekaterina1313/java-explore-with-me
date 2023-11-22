@@ -18,20 +18,19 @@ public class StatsClient {
     private String statApiUrl;
 
     private final RestTemplate restTemplate;
-    private static final String API_PREFIX = "/statApi";
 
     public StatsClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     public void saveEndpointHit(EndpointHit endpointHit) {
-        String endpointUrl = statApiUrl + API_PREFIX + "/hit";
+        String endpointUrl = statApiUrl + "/hit";
         restTemplate.postForObject(endpointUrl, endpointHit, Void.class);
     }
 
     public List<ViewStats> getStats(String start, String end, List<String> uris, boolean unique) {
         String uriString = uris != null ? String.join(",", uris) : "";
-        String endpointUrl = statApiUrl + API_PREFIX + "/stats?start={start}&end={end}&uris={uris}&unique={unique}";
+        String endpointUrl = statApiUrl + "/stats?start={start}&end={end}&uris={uris}&unique={unique}";
 
         ResponseEntity<List<ViewStats>> response = restTemplate.exchange(
                 endpointUrl,

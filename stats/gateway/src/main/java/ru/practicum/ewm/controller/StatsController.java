@@ -10,7 +10,6 @@ import ru.practicum.ewm.model.ViewStats;
 import java.util.List;
 
 @RestController
-@RequestMapping("/statApi")
 public class StatsController {
     private final StatsClient statsClient;
 

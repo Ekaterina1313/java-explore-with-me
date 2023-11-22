@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-@RequestMapping("/statApi")
 public class StatsController {
     private final StatsService statsService;
 

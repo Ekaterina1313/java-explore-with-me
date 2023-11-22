@@ -10,4 +10,4 @@ server:
   port: 8080
 
 statApi:
-  url: http://host.docker.internal:9090
+  url: http://localhost:9090
