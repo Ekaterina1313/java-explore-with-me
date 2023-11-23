@@ -14,7 +14,7 @@ import java.util.List;
 
 @Component
 public class StatsClient {
-    @Value("${statApi.url}")
+    @Value("${stats-server.url}")
     private String statApiUrl;
 
     private final RestTemplate restTemplate;

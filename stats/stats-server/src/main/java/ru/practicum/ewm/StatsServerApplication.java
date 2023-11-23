@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StatApiApplication {
+public class StatsServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(StatApiApplication.class, args);
+        SpringApplication.run(StatsServerApplication.class, args);
     }
 }

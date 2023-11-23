@@ -15,7 +15,8 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "FROM EndpointHit e " +
             "WHERE e.timestamp BETWEEN :start AND :end " +
             "AND (:uris IS NULL OR e.uri IN :uris) " +
-            "GROUP BY e.app, e.uri")
+            "GROUP BY e.app, e.uri " +
+            "ORDER BY COUNT(e) DESC")
     List<ViewStats> findStatsByDateRangeAndUris(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,
@@ -25,7 +26,8 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
     @Query("SELECT new ru.practicum.ewm.model.ViewStats(e.app, e.uri, COUNT(e)) " +
             "FROM EndpointHit e " +
             "WHERE e.timestamp BETWEEN :start AND :end " +
-            "GROUP BY e.app, e.uri")
+            "GROUP BY e.app, e.uri " +
+            "ORDER BY COUNT(e) DESC")
     List<ViewStats> findStatsByDateRange(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
