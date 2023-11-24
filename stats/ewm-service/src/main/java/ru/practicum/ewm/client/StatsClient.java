@@ -29,8 +29,8 @@ public class StatsClient {
     }
 
     public List<ViewStats> getStats(String start, String end, List<String> uris, boolean unique) {
-        String uriString = uris != null ? String.join(",", uris) : "";
-        String endpointUrl = statApiUrl + "/stats?start={start}&end={end}&uris={uris}&unique={unique}";
+        String uriString = uris != null ? String.join(", ", uris) : "";
+        String endpointUrl = statApiUrl + "/stats?start={start}&end={end}&uris={uriString}&unique={unique}";
 
         ResponseEntity<List<ViewStats>> response = restTemplate.exchange(
                 endpointUrl,
