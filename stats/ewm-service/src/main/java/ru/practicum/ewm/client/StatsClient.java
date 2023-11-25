@@ -36,7 +36,7 @@ public class StatsClient {
                 endpointUrl,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
-                new ParameterizedTypeReference<List<ViewStats>>() {
+                new ParameterizedTypeReference<>() {
                 },
                 start, end, uriString, unique
         );
