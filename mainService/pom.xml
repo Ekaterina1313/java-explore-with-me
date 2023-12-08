@@ -33,6 +33,7 @@
         <module>private</module>
         <module>public</module>
         <module>main-client</module>
+        <module>common</module>
     </modules>
 
 </project>
