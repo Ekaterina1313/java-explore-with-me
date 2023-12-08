@@ -5,18 +5,23 @@
 
     <parent>
         <groupId>ru.practicum</groupId>
-        <artifactId>stats-service</artifactId>
+        <artifactId>main-service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>stats-client</name>
-
-    <artifactId>stats-client</artifactId>
+    <artifactId>service-public</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>service-public</name>
     <dependencies>
+        <dependency>
+            <groupId>ru.practicum</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -26,7 +31,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.7.9</version>
+            <version>3.1.0</version>
         </dependency>
 
         <dependency>
@@ -34,6 +39,17 @@
             <artifactId>lombok</artifactId>
             <version>1.18.26</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
         </dependency>
 
         <dependency>
@@ -50,5 +66,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

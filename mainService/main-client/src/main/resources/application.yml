@@ -1,0 +1,16 @@
+services:
+  admin: http://service-admin:9091
+  private: http://service-private:9092
+  public: http://service-public:9093
+
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+logging:
+ level:
+  org.springframework.web.client.RestTemplate: DEBUG
+
+server:
+  port: 8080
+
