@@ -21,6 +21,7 @@ services:
       - STAT_API_URL=http://service-admin:9091
       - STAT_API_URL=http://service-private:9092
       - STAT_API_URL=http://service-public:9093
+      - POSTGRES_MAIN_DB_URL=jdbc:postgresql://main-db:5432/main-db
 
   service-admin:
     build:
@@ -32,7 +33,7 @@ services:
     depends_on:
       - common
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5433/ExploreWithMeDBMain
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/ExploreWithMeDBMain
       - SPRING_DATASOURCE_USERNAME=ewm-main-user
       - SPRING_DATASOURCE_PASSWORD=123
 
@@ -46,7 +47,7 @@ services:
     depends_on:
       - service-admin
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5433/ExploreWithMeDBMain
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/ExploreWithMeDBMain
       - SPRING_DATASOURCE_USERNAME=ewm-main-user
       - SPRING_DATASOURCE_PASSWORD=123
 
@@ -60,7 +61,7 @@ services:
     depends_on:
       - service-private
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5433/ExploreWithMeDBMain
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/ExploreWithMeDBMain
       - SPRING_DATASOURCE_USERNAME=ewm-main-user
       - SPRING_DATASOURCE_PASSWORD=123
 
@@ -104,7 +105,7 @@ services:
     image: postgres:14-alpine
     container_name: main-db
     ports:
-      - "6542:5433"
+      - "6542:5432"
     environment:
       - POSTGRES_USER=ewm-main-user
       - POSTGRES_PASSWORD=123
