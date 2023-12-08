@@ -24,8 +24,8 @@ public class AdminCompilationClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> create(NewCompilationDto NewCompilationDto) {
-        return post("", NewCompilationDto);
+    public ResponseEntity<Object> create(NewCompilationDto newCompilationDto) {
+        return post("", newCompilationDto);
     }
 
     public ResponseEntity<Object> deleteById(Integer compId) {

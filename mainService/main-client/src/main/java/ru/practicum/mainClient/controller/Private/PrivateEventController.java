@@ -69,8 +69,10 @@ public class PrivateEventController {
         log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = " + userId +
                 " пользователем с id = " + updatedEvent.getId());
         if (updatedEvent.getEventDate() != null) {
+            validEventDate(updatedEvent.getEventDate());
         }
         if (updatedEvent.getParticipantLimit() != null) {
+            validParticipantLimit(updatedEvent.getParticipantLimit());
         }
         return client.update(userId, eventId, updatedEvent);
     }
