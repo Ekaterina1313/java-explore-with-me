@@ -24,7 +24,7 @@ public class BaseClient {
     }
 
     protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.GET, path, parameters, null);
+        return makeAndSendRequestNullBody(HttpMethod.GET, path, parameters);
     }
 
     protected <T> ResponseEntity<Object> post(String path, T body) {
@@ -52,7 +52,7 @@ public class BaseClient {
     }
 
     protected ResponseEntity<Object> delete(String path, @Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.DELETE, path, parameters, null);
+        return makeAndSendRequestNullBody(HttpMethod.DELETE, path, parameters);
     }
 
     private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path,
@@ -60,21 +60,7 @@ public class BaseClient {
         HttpEntity<T> requestEntity = new HttpEntity<>(body);
         ResponseEntity<Object> serverResponse;
         try {
-            UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(path);
-            if (parameters != null) {
-                parameters.forEach((key, value) -> {
-                    if (value instanceof List) {
-                        List<?> listValue = (List<?>) value;
-                        String commaSeparated = listValue.stream()
-                                .map(Object::toString)
-                                .collect(Collectors.joining(","));
-                        uriBuilder.queryParam(key, commaSeparated);
-                    } else {
-                        uriBuilder.queryParam(key, value);
-                    }
-                });
-            }
-            String finalPath = uriBuilder.build().toUriString();
+            String finalPath = getFinalPath(path, parameters);
             serverResponse = rest.exchange(finalPath, method, requestEntity, Object.class);
         } catch (HttpStatusCodeException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
@@ -82,17 +68,44 @@ public class BaseClient {
         return prepareGatewayResponse(serverResponse);
     }
 
+    private ResponseEntity<Object> makeAndSendRequestNullBody(HttpMethod method, String path,
+                                                              @Nullable Map<String, Object> parameters) {
+        ResponseEntity<Object> serverResponse;
+        try {
+            String finalPath = getFinalPath(path, parameters);
+            serverResponse = rest.exchange(finalPath, method, HttpEntity.EMPTY, Object.class);
+        } catch (HttpStatusCodeException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
+        }
+        return prepareGatewayResponse(serverResponse);
+    }
+
+    private String getFinalPath(String path, @Nullable Map<String, Object> parameters) {
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(path);
+        if (parameters != null) {
+            parameters.forEach((key, value) -> {
+                if (value instanceof List) {
+                    List<?> listValue = (List<?>) value;
+                    String commaSeparated = listValue.stream()
+                            .map(Object::toString)
+                            .collect(Collectors.joining(","));
+                    uriBuilder.queryParam(key, commaSeparated);
+                } else {
+                    uriBuilder.queryParam(key, value);
+                }
+            });
+        }
+        return uriBuilder.build().toUriString();
+    }
+
     private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
         if (response.getStatusCode().is2xxSuccessful()) {
             return response;
         }
-
         ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(response.getStatusCode());
-
         if (response.hasBody()) {
             return responseBuilder.body(response.getBody());
         }
-
         return responseBuilder.build();
     }
 }
