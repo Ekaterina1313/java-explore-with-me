@@ -56,7 +56,7 @@ public class BaseClient {
     }
 
     private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path,
-                                                          @Nullable Map<String, Object> parameters, @Nullable T body) {
+                                                          @Nullable Map<String, Object> parameters, T body) {
         HttpEntity<T> requestEntity = new HttpEntity<>(body);
         ResponseEntity<Object> serverResponse;
         try {
