@@ -16,7 +16,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - service-public
+      - main-db
     environment:
       - STAT_API_URL=http://service-admin:9091
       - STAT_API_URL=http://service-private:9092
