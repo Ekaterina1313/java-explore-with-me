@@ -21,6 +21,7 @@ services:
       - STAT_API_URL=http://service-admin:9091
       - STAT_API_URL=http://service-private:9092
       - STAT_API_URL=http://service-public:9093
+    command: ["./wait-for-it.sh", "--timeout=120", "localhost:8080", "--", "java -jar your_app.jar"]
 
   service-admin:
     build:
