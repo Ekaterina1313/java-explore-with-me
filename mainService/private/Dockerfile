@@ -2,8 +2,8 @@ FROM amazoncorretto:11
 
 WORKDIR /app
 
-COPY target/private-0.0.1-SNAPSHOT.jar private.jar
+COPY target/service-private-0.0.1-SNAPSHOT.jar service-private.jar
 
 ENV DATE_FORMAT_PATTERN "yyyy-MM-dd HH:mm:ss"
 
-CMD ["java", "-Duser.timezone=Europe/Moscow", "-jar", "private.jar"]
+CMD ["java", "-Duser.timezone=Europe/Moscow", "-jar", "service-private.jar"]
