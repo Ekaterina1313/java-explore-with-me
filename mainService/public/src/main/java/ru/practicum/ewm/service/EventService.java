@@ -29,8 +29,8 @@ public class EventService {
     private final EventRepository eventRepository;
     private final RestTemplate restTemplate;
     private static String app = "mainService/public";
-    private final static String endpointUrl = "http://ewm-service:9090/hit";
-    private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final String endpointUrl = "http://ewm-service:9090/hit";
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
     public EventService(EventRepository eventRepository, RestTemplate restTemplate) {
