@@ -64,10 +64,6 @@ public class EventController {
                                @RequestBody UpdatedEventDto updatedEvent) {
         log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = " + userId +
                 " пользователем с id = " + updatedEvent.getId());
-        if (updatedEvent.getEventDate() != null) {
-        }
-        if (updatedEvent.getParticipantLimit() != null) {
-        }
         return eventService.update(userId, eventId, updatedEvent);
     }
 
