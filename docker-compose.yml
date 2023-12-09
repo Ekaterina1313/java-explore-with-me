@@ -6,25 +6,13 @@ services:
       dockerfile: Dockerfile
     container_name: stats-server
     ports:
-      - "9088:9088"
+      - "9090:9090"
     depends_on:
       - stats-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ExploreWithMeDB
       - SPRING_DATASOURCE_USERNAME=ewm-user
       - SPRING_DATASOURCE_PASSWORD=123
-
-  stats-client:
-    build:
-      context: ./stats-service/client
-      dockerfile: Dockerfile
-    container_name: stats-client
-    ports:
-      - "9090:9090"
-    depends_on:
-      - stats-server
-    environment:
-      - SERVER_URL=http://stats-server:9088
 
   ewm-service:
     build:
