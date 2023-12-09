@@ -7,7 +7,7 @@ logging:
   org.springframework.web.client.RestTemplate: DEBUG
 
 server:
-  port: 9091
+  port: 9090
 
 stats-server:
   url: http://host.docker.internal:9088
