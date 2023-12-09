@@ -5,25 +5,4 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Start Docker containers
-        run: docker-compose up --detach
-
-      - name: Wait for ewm-service
-        run: ./tests/.github/workflows/wait-for-it.sh -t 120 localhost:8080
-
-      - name: Wait for stats-server
-        run: ./tests/.github/workflows/wait-for-it.sh -t 120 localhost:9090
-
-      - name: Run API tests
-        run: |
-          docker exec ewm-service ./your-api-tests-command
-          uses: yandex-praktikum/java-explore-with-me/.github/workflows/api-tests.yml@ci
-
-      - name: Show container logs
-        run: docker-compose logs ewm-service
+    uses: yandex-praktikum/java-explore-with-me/.github/workflows/api-tests.yml@ci
