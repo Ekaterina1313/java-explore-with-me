@@ -1,6 +1,5 @@
 package ru.practicum.mainService.mapper;
 
-
 import ru.practicum.mainService.dto.CompilationDto;
 import ru.practicum.mainService.dto.EventShortDto;
 import ru.practicum.mainService.dto.NewCompilationDto;

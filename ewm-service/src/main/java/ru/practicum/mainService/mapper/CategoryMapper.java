@@ -1,6 +1,5 @@
 package ru.practicum.mainService.mapper;
 
-
 import ru.practicum.mainService.dto.CategoryDto;
 import ru.practicum.mainService.model.Category;
 

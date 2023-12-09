@@ -109,7 +109,6 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                                                     @Param("rangeEnd") LocalDateTime rangeEnd,
                                                     @Param("paid") Boolean paid,
                                                     Pageable pageable);
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
@@ -168,5 +167,4 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                                                    @Param("rangeEnd") LocalDateTime rangeEnd,
                                                    @Param("paid") Boolean paid,
                                                    Pageable pageable);
-
 }

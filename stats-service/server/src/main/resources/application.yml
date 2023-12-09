@@ -14,7 +14,7 @@ spring:
       mode: always
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/ExploreWithMeDB
+    url: jdbc:postgresql://stats-db:5432/ExploreWithMeDB
     username: ewm-user
     password: 123
 
