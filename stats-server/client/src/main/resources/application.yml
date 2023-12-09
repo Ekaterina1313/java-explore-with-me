@@ -1,0 +1,13 @@
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+logging:
+ level:
+  org.springframework.web.client.RestTemplate: DEBUG
+
+server:
+  port: 9090
+
+stats-server:
+  url: http://host.docker.internal:9088
