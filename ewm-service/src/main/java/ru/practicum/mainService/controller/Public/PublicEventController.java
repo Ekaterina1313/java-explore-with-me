@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.service.Public.PublicEventService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -31,10 +32,11 @@ public class PublicEventController {
             @RequestParam(value = "sort", defaultValue = "VIEWS") String sort,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size,
-            @RequestHeader(name = "X-Client-Ip", required = false) String clientIp,
-            @RequestHeader(name = "X-Endpoint-Path", required = false) String endpointPath) {
+            HttpServletRequest request) {
         log.info("ADMIN-controller: Поступил запрос на просмотр событий в соответствии с параметрами сортировки");
+        String clientIp = request.getRemoteAddr();
         log.info("client ip: {}", clientIp);
+        String endpointPath = request.getRequestURI();
         log.info("endpoint path: {}", endpointPath);
         try {
             return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size,
@@ -48,11 +50,11 @@ public class PublicEventController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getById(@PathVariable Integer id,
-                                @RequestHeader(name = "X-Client-Ip", required = false) String clientIp,
-                                @RequestHeader(name = "X-Endpoint-Path", required = false) String endpointPath) {
+    public EventFullDto getById(@PathVariable Integer id, HttpServletRequest request) {
         log.info("PUBLIC-controller: Поступил запрос на просмотр события с id = ." + id);
+        String clientIp = request.getRemoteAddr();
         log.info("client ip: {}", clientIp);
+        String endpointPath = request.getRequestURI();
         log.info("endpoint path: {}", endpointPath);
         try {
             return eventService.getById(id, clientIp, endpointPath);
