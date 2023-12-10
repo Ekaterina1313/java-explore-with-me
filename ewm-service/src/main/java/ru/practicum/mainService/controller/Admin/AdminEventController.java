@@ -6,11 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
-import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.service.Admin.AdminEventService;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
