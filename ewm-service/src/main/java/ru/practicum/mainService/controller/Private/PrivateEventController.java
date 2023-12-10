@@ -31,11 +31,12 @@ public class PrivateEventController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto create(@RequestBody EventDto eventDto, @PathVariable Integer userId) {
+        LocalDateTime now = LocalDateTime.now();
         log.info("PRIVATE-controller: Поступил запрос на добавление нового события = " + eventDto.getId());
         validDescriptionOrAnnotation(eventDto.getDescription());
         validDescriptionOrAnnotation(eventDto.getAnnotation());
         validCategory(eventDto);
-        validEventDate(eventDto.getEventDate());
+        validEventDate(eventDto.getEventDate(), now);
         validParticipantLimit(eventDto.getParticipantLimit());
         return eventService.create(eventDto, userId);
     }
@@ -71,6 +72,7 @@ public class PrivateEventController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto update(@PathVariable Integer userId, @PathVariable Integer eventId,
                                @RequestBody UpdatedEventDto updatedEvent) {
+        LocalDateTime now = LocalDateTime.now();
         log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = " + userId +
                 " пользователем с id = " + updatedEvent.getId());
         if (updatedEvent.getDescription() != null) {
@@ -80,7 +82,7 @@ public class PrivateEventController {
             validDescriptionOrAnnotation(updatedEvent.getAnnotation());
         }
         if (updatedEvent.getEventDate() != null) {
-            validEventDate(updatedEvent.getEventDate());
+            validEventDate(updatedEvent.getEventDate(), now);
         }
         if (updatedEvent.getParticipantLimit() != null) {
             validParticipantLimit(updatedEvent.getParticipantLimit());
@@ -121,10 +123,10 @@ public class PrivateEventController {
         }
     }
 
-    private void validEventDate(String stringEventDate) {
+    private void validEventDate(String stringEventDate, LocalDateTime time) {
         LocalDateTime eventDate = LocalDateTime.parse(stringEventDate,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        if (LocalDateTime.now().plusHours(2).isAfter(eventDate)) {
+        if (time.isAfter(eventDate)) {
             throw new IncorrectParamException("Field: eventDate. Error: должно содержать дату," +
                     " которая еще не наступила. Value: " + stringEventDate);
         }

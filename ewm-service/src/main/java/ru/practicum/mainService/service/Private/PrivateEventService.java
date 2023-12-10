@@ -107,9 +107,9 @@ public class PrivateEventService {
             event.setRequestModeration(updatedEvent.getRequestModeration());
         }
         if (updatedEvent.getStateAction() != null) {
-            if (updatedEvent.getStateAction().equals(StateAction.SEND_TO_REVIEW.name().toUpperCase())) {
+            if (updatedEvent.getStateAction().equalsIgnoreCase(StateAction.SEND_TO_REVIEW.name())) {
                 event.setState(States.PENDING);
-            } else if (updatedEvent.getStateAction().equals(StateAction.CANCEL_REVIEW.name().toUpperCase())) {
+            } else if (updatedEvent.getStateAction().equalsIgnoreCase(StateAction.CANCEL_REVIEW.name().toUpperCase())) {
                 event.setState(States.CANCELED);
             } else {
                 throw new InvalidRequestException("Неверно указано поле 'stateAction'.");
