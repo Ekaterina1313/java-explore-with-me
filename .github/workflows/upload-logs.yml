@@ -1,0 +1,23 @@
+name: Upload Logs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Upload Logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: ewm-log
+          path: ./ewm-service/my-application.log
+        env:
+          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/11.0.21-9/x64
+          JAVA_HOME_11_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/11.0.21-9/x64
