@@ -1,20 +1,5 @@
 version: '3.1'
 services:
-  stats-server:
-    build:
-      context: ./stats-service/server
-      dockerfile: Dockerfile
-    container_name: stats-server
-    ports:
-      - "9090:9090"
-    depends_on:
-      - stats-db
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ExploreWithMeDB
-      - SPRING_DATASOURCE_USERNAME=ewm-user
-      - SPRING_DATASOURCE_PASSWORD=123
-
-
   ewm-service:
     build:
       context: ./ewm-service
@@ -27,9 +12,24 @@ services:
       - ewm-db
       - stats-db
     environment:
-      - STAT_API_URL=http://localhost:9090
+      - STAT_API_URL=http://stats-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ExploreWithMeDBMain
       - SPRING_DATASOURCE_USERNAME=ewm-main-user
+      - SPRING_DATASOURCE_PASSWORD=123
+    command: ["/bin/sh", "-c", "./.github/workflows/wait-for-it.sh -t 60 ewm-service:8080 && java -Duser.timezone=Europe/Moscow -jar /app.jar"]
+
+  stats-server:
+    build:
+      context: ./stats-service/server
+      dockerfile: Dockerfile
+    container_name: stats-server
+    ports:
+      - "9090:9090"
+    depends_on:
+      - stats-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ExploreWithMeDB
+      - SPRING_DATASOURCE_USERNAME=ewm-user
       - SPRING_DATASOURCE_PASSWORD=123
 
 
