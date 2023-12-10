@@ -35,6 +35,8 @@ public class PrivateEventController {
         validCategory(eventDto);
         validEventDate(eventDto.getEventDate());
         validParticipantLimit(eventDto.getParticipantLimit());
+        validDescriptionOrAnnotation(eventDto.getDescription());
+        validDescriptionOrAnnotation(eventDto.getAnnotation());
         return eventService.create(eventDto, userId);
     }
 
@@ -71,6 +73,12 @@ public class PrivateEventController {
                                @RequestBody UpdatedEventDto updatedEvent) {
         log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = " + userId +
                 " пользователем с id = " + updatedEvent.getId());
+        if (updatedEvent.getDescription() != null) {
+            validDescriptionOrAnnotation(updatedEvent.getDescription());
+        }
+        if (updatedEvent.getAnnotation() != null) {
+            validDescriptionOrAnnotation(updatedEvent.getAnnotation());
+        }
         if (updatedEvent.getEventDate() != null) {
             validEventDate(updatedEvent.getEventDate());
         }
@@ -121,4 +129,13 @@ public class PrivateEventController {
                     " которая еще не наступила. Value: " + stringEventDate);
         }
     }
+
+    private void validDescriptionOrAnnotation(String text) {
+        if (text == null || text.isBlank()) {
+            throw new InvalidRequestException("Field: description. Error: must not be null or blank. Value: "
+                    + text);
+        }
+    }
+
+
 }
