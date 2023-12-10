@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class PublicEventService {
     private final EventRepository eventRepository;
     private final RestTemplate restTemplate;
-    private static String app = "mainService/public";
+    private static final String app = "mainService/public";
     private static final String endpointUrl = "http://stats-server:9090/hit";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
