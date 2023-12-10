@@ -6,8 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
+import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.service.Admin.AdminventService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -44,6 +47,16 @@ public class AdminEventController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto update(@PathVariable Integer eventId, @RequestBody UpdatedEventDto updatedEvent) {
         log.info("ADMIN-controller: Поступил запрос на обновление события с id = " + eventId);
+        validEventDate(updatedEvent);
         return eventService.update(eventId, updatedEvent);
+    }
+
+    private void validEventDate(UpdatedEventDto upEvent) {
+        LocalDateTime eventDate = LocalDateTime.parse(upEvent.getEventDate(),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        if (LocalDateTime.now().plusHours(1).isAfter(eventDate)) {
+            throw new IncorrectParamException("Field: eventDate. Error: должно содержать дату," +
+                    " которая еще не наступила. Value: " + upEvent.getEventDate());
+        }
     }
 }

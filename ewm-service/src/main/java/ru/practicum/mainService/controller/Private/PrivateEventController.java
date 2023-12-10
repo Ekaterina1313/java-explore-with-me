@@ -8,10 +8,14 @@ import ru.practicum.mainService.dto.EventDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.ParticipationRequestDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
+import ru.practicum.mainService.error.IncorrectParamException;
+import ru.practicum.mainService.error.InvalidRequestException;
 import ru.practicum.mainService.model.EventRequestStatusUpdateRequest;
 import ru.practicum.mainService.model.EventRequestStatusUpdateResult;
 import ru.practicum.mainService.service.Private.PrivateEventService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -28,6 +32,9 @@ public class PrivateEventController {
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto create(@RequestBody EventDto eventDto, @PathVariable Integer userId) {
         log.info("PRIVATE-controller: Поступил запрос на добавление нового события = " + eventDto.getId());
+        validCategory(eventDto);
+        validEventDate(eventDto.getEventDate());
+        validParticipantLimit(eventDto.getParticipantLimit());
         return eventService.create(eventDto, userId);
     }
 
@@ -64,6 +71,12 @@ public class PrivateEventController {
                                @RequestBody UpdatedEventDto updatedEvent) {
         log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = " + userId +
                 " пользователем с id = " + updatedEvent.getId());
+        if (updatedEvent.getEventDate() != null) {
+            validEventDate(updatedEvent.getEventDate());
+        }
+        if (updatedEvent.getParticipantLimit() != null) {
+            validParticipantLimit(updatedEvent.getParticipantLimit());
+        }
         return eventService.update(userId, eventId, updatedEvent);
     }
 
@@ -86,5 +99,26 @@ public class PrivateEventController {
                                                          @RequestBody EventRequestStatusUpdateRequest request) {
         log.info("PRIVATE-controller: Поступил запрос на обновление статуса заявок.");
         return eventService.updateRequests(userId, eventId, request);
+    }
+
+    private void validParticipantLimit(Integer limit) {
+        if (limit <= 0) {
+            throw new InvalidRequestException("Field: ParticipantLimit. Error: must not be 0 or less. Value: " + limit);
+        }
+    }
+
+    private void validCategory(EventDto eventDto) {
+        if (eventDto.getCategory() == null) {
+            throw new InvalidRequestException("Field: category. Error: must not be blank. Value: null");
+        }
+    }
+
+    private void validEventDate(String stringEventDate) {
+        LocalDateTime eventDate = LocalDateTime.parse(stringEventDate,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        if (LocalDateTime.now().plusHours(2).isAfter(eventDate)) {
+            throw new IncorrectParamException("Field: eventDate. Error: должно содержать дату," +
+                    " которая еще не наступила. Value: " + stringEventDate);
+        }
     }
 }

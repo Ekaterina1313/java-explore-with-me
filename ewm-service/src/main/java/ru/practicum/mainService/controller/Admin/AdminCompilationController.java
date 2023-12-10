@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.CompilationDto;
 import ru.practicum.mainService.dto.NewCompilationDto;
+import ru.practicum.mainService.error.InvalidRequestException;
 import ru.practicum.mainService.service.Admin.AdminCompilationService;
 
 @RestController
@@ -23,6 +24,7 @@ public class AdminCompilationController {
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto create(@RequestBody NewCompilationDto newCompilationDto) {
         log.info("ADMIN-controller: Поступил запрос на добавление новой подборки: " + newCompilationDto.getTitle());
+        validTitle(newCompilationDto);
         try {
             return compilationService.create(newCompilationDto);
         } catch (DataIntegrityViolationException ex) {
@@ -42,5 +44,11 @@ public class AdminCompilationController {
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto update(@PathVariable Integer compId, @RequestBody NewCompilationDto newCompilationDto) {
         return compilationService.update(compId, newCompilationDto);
+    }
+
+    private void validTitle(NewCompilationDto newCompilationDto) {
+        if (newCompilationDto.getTitle() == null || newCompilationDto.getTitle().isBlank()) {
+            throw new InvalidRequestException("Field: title. Error: must not be blank. Value: null");
+        }
     }
 }
