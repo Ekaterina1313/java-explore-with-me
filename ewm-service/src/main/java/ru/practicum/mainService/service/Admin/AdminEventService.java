@@ -62,9 +62,10 @@ public class AdminEventService {
     }
 
     public EventFullDto update(Integer eventId, UpdatedEventDto updatedEvent) {
+        LocalDateTime now = LocalDateTime.now();
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
-
+        validEventDate(eventById, now);
         if (updatedEvent.getStateAction().equals(StateAction.PUBLISH_EVENT.name().toUpperCase())) {
             if (eventById.getState().equals(States.PENDING)) {
                 eventById.setState(States.PUBLISHED);
@@ -103,5 +104,12 @@ public class AdminEventService {
             }
         }
         return states;
+    }
+
+    private void validEventDate(Event event, LocalDateTime time) {
+        if (time.isAfter(event.getEventDate())) {
+            throw new IncorrectParamException("Field: eventDate. Error: должно содержать дату," +
+                    " которая еще не наступила. Value: " + event.getEventDate());
+        }
     }
 }

@@ -40,23 +40,12 @@ public class AdminEventController {
             log.error("Error getting event", ex);
             throw ex;
         }
-
     }
 
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto update(@PathVariable Integer eventId, @RequestBody UpdatedEventDto updatedEvent) {
         log.info("ADMIN-controller: Поступил запрос на обновление события с id = " + eventId);
-        validEventDate(updatedEvent);
         return eventService.update(eventId, updatedEvent);
-    }
-
-    private void validEventDate(UpdatedEventDto upEvent) {
-        LocalDateTime eventDate = LocalDateTime.parse(upEvent.getEventDate(),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        if (LocalDateTime.now().plusHours(1).isAfter(eventDate)) {
-            throw new IncorrectParamException("Field: eventDate. Error: должно содержать дату," +
-                    " которая еще не наступила. Value: " + upEvent.getEventDate());
-        }
     }
 }
