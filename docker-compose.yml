@@ -14,6 +14,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=ewm-user
       - SPRING_DATASOURCE_PASSWORD=123
 
+
   ewm-service:
     build:
       context: ./ewm-service
@@ -30,6 +31,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ExploreWithMeDBMain
       - SPRING_DATASOURCE_USERNAME=ewm-main-user
       - SPRING_DATASOURCE_PASSWORD=123
+
 
   stats-db:
     image: postgres:14-alpine
