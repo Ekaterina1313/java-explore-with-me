@@ -32,11 +32,11 @@ public class PrivateEventController {
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto create(@RequestBody EventDto eventDto, @PathVariable Integer userId) {
         log.info("PRIVATE-controller: Поступил запрос на добавление нового события = " + eventDto.getId());
+        validDescriptionOrAnnotation(eventDto.getDescription());
+        validDescriptionOrAnnotation(eventDto.getAnnotation());
         validCategory(eventDto);
         validEventDate(eventDto.getEventDate());
         validParticipantLimit(eventDto.getParticipantLimit());
-        validDescriptionOrAnnotation(eventDto.getDescription());
-        validDescriptionOrAnnotation(eventDto.getAnnotation());
         return eventService.create(eventDto, userId);
     }
 
