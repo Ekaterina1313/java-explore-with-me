@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
 import ru.practicum.mainService.error.IncorrectParamException;
-import ru.practicum.mainService.service.Admin.AdminventService;
+import ru.practicum.mainService.service.Admin.AdminEventService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,27 +17,27 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/admin/events")
 public class AdminEventController {
-    private final AdminventService eventService;
+    private final AdminEventService eventService;
 
-    public AdminEventController(AdminventService eventService) {
+    public AdminEventController(AdminEventService eventService) {
         this.eventService = eventService;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getEvents(
-            @RequestParam(name = "users", required = false) List<Integer> users,
-            @RequestParam(name = "states", required = false) List<String> states,
-            @RequestParam(name = "categories", required = false) List<Integer> categories,
-            @RequestParam(name = "rangeStart", required = false) String rangeStart,
-            @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
+            @RequestParam(name = "users") List<Integer> users,
+            @RequestParam(name = "states") List<String> states,
+            @RequestParam(name = "categories") List<Integer> categories,
+            @RequestParam(name = "rangeStart") String rangeStart,
+            @RequestParam(value = "rangeEnd") String rangeEnd,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size) {
-        log.info("ADMIN-controller: Поступил запрос на просмотр событий для юзеров с id = " + users);
+        log.info("ADMIN-controller: Поступил запрос на просмотр событий.");
         try {
             return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
         } catch (DataIntegrityViolationException ex) {
-            log.error("Error creating event", ex);
+            log.error("Error getting event", ex);
             throw ex;
         }
 

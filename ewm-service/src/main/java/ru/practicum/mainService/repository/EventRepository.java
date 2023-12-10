@@ -27,23 +27,36 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             @Param("end") LocalDateTime end,
             Pageable pageable);
 
-    @Query("SELECT e FROM Event e WHERE e.initiator.id IN :userIds")
-    Page<Event> findAllByInitiatorIdIn(List<Integer> userIds, Pageable pageable);
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state IN :states " +
+            "AND e.category.id IN :categoryIds " +
+            "AND e.createdOn BETWEEN :start AND :end")
+    Page<Event> getFilteredEventsWithoutUsers(
+            @Param("states") List<States> states,
+            @Param("categoryIds") List<Integer> categoryIds,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            Pageable pageable);
 
-    @Query("SELECT e FROM Event e WHERE e.state IN :states")
-    Page<Event> findAllByStateIn(List<States> states, Pageable pageable);
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.initiator.id IN :userIds " +
+            "AND e.state IN :states " +
+            "AND e.createdOn BETWEEN :start AND :end")
+    Page<Event> getFilteredEventsWithoutCategories(
+            @Param("userIds") List<Integer> userIds,
+            @Param("states") List<States> states,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            Pageable pageable);
 
-    @Query("SELECT e FROM Event e WHERE e.category.id IN :categoryIds")
-    Page<Event> findAllByCategoryIdIn(List<Integer> categoryIds, Pageable pageable);
-
-    @Query("SELECT e FROM Event e WHERE e.createdOn BETWEEN :start AND :end")
-    Page<Event> findAllByCreatedOnBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
-
-    @Query("SELECT e FROM Event e WHERE e.createdOn > :time")
-    Page<Event> findAllByCreatedOnAfter(LocalDateTime time, Pageable pageable);
-
-    @Query("SELECT e FROM Event e WHERE e.createdOn < :time")
-    Page<Event> findAllByCreatedOnBefore(LocalDateTime time, Pageable pageable);
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state IN :states " +
+            "AND e.createdOn BETWEEN :start AND :end")
+    Page<Event> getFilteredEventsWithoutUsersAndCategories(
+            @Param("states") List<States> states,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            Pageable pageable);
 
     @Modifying
     @Transactional

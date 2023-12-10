@@ -20,62 +20,39 @@ import ru.practicum.mainService.repository.UserRepository;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AdminventService {
+public class AdminEventService {
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final RestTemplate restTemplate;
-    private static String app = "mainService/admin";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public AdminventService(EventRepository eventRepository, UserRepository userRepository,
-                            CategoryRepository categoryRepository, RestTemplate restTemplate) {
+    public AdminEventService(EventRepository eventRepository, UserRepository userRepository,
+                             CategoryRepository categoryRepository, RestTemplate restTemplate) {
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.restTemplate = restTemplate;
     }
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories,
                                         String rangeStart, String rangeEnd, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
-        Page<Event> events = null;
-        if (users == null && states == null && categories == null && rangeStart == null && rangeEnd == null) {
-            events = eventRepository.findAll(pageable);
-        }
-        if (users != null) {
-            events = eventRepository.findAllByInitiatorIdIn(users, pageable);
-        }
-        if (states != null) {
-            List<States> enumStates = states.stream()
-                    .map(States::valueOf)
-                    .collect(Collectors.toList());
-            events = eventRepository.findAllByStateIn(enumStates, pageable);
-        }
-        if (categories != null) {
-            events = eventRepository.findAllByCategoryIdIn(categories, pageable);
-        }
-        if (rangeStart != null && rangeEnd != null) {
-            events = eventRepository.findAllByCreatedOnBetween(
+        Page<Event> events;
+        if (users.get(0) == 0 && categories.get(0) == 0) {
+            events = eventRepository.getFilteredEventsWithoutUsersAndCategories(getStates(states),
                     LocalDateTime.parse(rangeStart, formatter),
-                    LocalDateTime.parse(rangeEnd, formatter),
-                    pageable);
-        }
-
-        if (rangeStart != null && rangeEnd == null) {
-            events = eventRepository.findAllByCreatedOnAfter(LocalDateTime.parse(rangeStart, formatter), pageable);
-        }
-        if (rangeEnd != null && rangeStart == null) {
-            events = eventRepository.findAllByCreatedOnBefore(LocalDateTime.parse(rangeEnd, formatter), pageable);
-        }
-
-        if (users != null && states != null && categories != null && rangeStart != null && rangeEnd != null) {
-            events = eventRepository.getFilteredEvents(users, states.stream().map(States::valueOf).collect(Collectors.toList()),
-                    categories, LocalDateTime.parse(rangeStart, formatter),
+                    LocalDateTime.parse(rangeEnd, formatter), pageable);
+        } else if (categories.get(0) == 0) {
+            events = eventRepository.getFilteredEventsWithoutCategories(users, getStates(states),
+                    LocalDateTime.parse(rangeStart, formatter),
+                    LocalDateTime.parse(rangeEnd, formatter), pageable);
+        } else if (users.get(0) == 0) {
+            events = eventRepository.getFilteredEventsWithoutUsers(getStates(states), categories,
+                    LocalDateTime.parse(rangeStart, formatter),
+                    LocalDateTime.parse(rangeEnd, formatter), pageable);
+        } else {
+            events = eventRepository.getFilteredEvents(users, getStates(states), categories,
+                    LocalDateTime.parse(rangeStart, formatter),
                     LocalDateTime.parse(rangeEnd, formatter), pageable);
         }
         return events.getContent()
@@ -110,5 +87,21 @@ public class AdminventService {
         } else {
             throw new InvalidRequestException("Неверно указано поле 'stateAction'.");
         }
+    }
+
+    private List<States> getStates(List<String> stringStates) {
+        List<States> states = new ArrayList<>();
+        for (String element : stringStates) {
+            if (element.equalsIgnoreCase(States.PENDING.name())) {
+                states.add(States.PENDING);
+            } else if (element.equalsIgnoreCase(States.PUBLISHED.name())) {
+                states.add(States.PUBLISHED);
+            } else if (element.equalsIgnoreCase(States.CANCELED.name())) {
+                states.add(States.CANCELED);
+            } else {
+                throw new InvalidRequestException("Неверно указано поле 'state'.");
+            }
+        }
+        return states;
     }
 }
