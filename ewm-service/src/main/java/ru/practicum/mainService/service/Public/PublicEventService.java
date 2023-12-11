@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
 @Service
 @Slf4j
 public class PublicEventService {
     private final EventRepository eventRepository;
     private final RestTemplate restTemplate;
     private static final String app = "mainService/public";
-    private static final String endpointUrl = "http://stats-server:9090/hit";
+    //private static final String endpointUrl = "http://stats-server:9090/hit";
+    private static final String endpointUrl = "http://localhost:9090/hit";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
@@ -56,7 +56,7 @@ public class PublicEventService {
             rangeStart = LocalDateTime.now().format(formatter);
         }
         if (rangeEnd == null) {
-            rangeEnd = LocalDateTime.of(999_999_998, 1, 1, 0, 0, 0)
+            rangeEnd = LocalDateTime.of(9999, 1, 1, 0, 0, 0)
                     .format(formatter);
         }
         EndpointHit endpointHit = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);

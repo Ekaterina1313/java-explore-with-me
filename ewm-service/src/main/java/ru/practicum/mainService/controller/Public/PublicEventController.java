@@ -27,9 +27,9 @@ public class PublicEventController {
             @RequestParam(name = "categories") List<Integer> categories,
             @RequestParam(value = "paid") Boolean paid,
             @RequestParam(name = "rangeStart", required = false) String rangeStart,
-            @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
-            @RequestParam(value = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,
-            @RequestParam(value = "sort", defaultValue = "VIEWS") String sort,
+            @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
+            @RequestParam(name = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,
+            @RequestParam(name = "sort", defaultValue = "VIEWS") String sort,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size,
             HttpServletRequest request) {
