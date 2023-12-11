@@ -65,9 +65,27 @@ public class AdminEventService {
         LocalDateTime now = LocalDateTime.now();
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
-        validEventDate(eventById, now);
+
+        if (updatedEvent.getAnnotation() != null) {
+            validAnnotation(updatedEvent.getAnnotation());
+            eventById.setAnnotation(updatedEvent.getAnnotation());
+        }
+        if (updatedEvent.getTitle() != null) {
+            validTitle(updatedEvent.getTitle());
+            eventById.setTitle(updatedEvent.getTitle());
+        }
+        if (updatedEvent.getDescription() != null) {
+            validDescription(updatedEvent.getDescription());
+            eventById.setDescription(updatedEvent.getDescription());
+        }
+        if (updatedEvent.getEventDate() != null) {
+            validEventDate(updatedEvent.getEventDate(), now);
+            eventById.setEventDate(LocalDateTime.parse(updatedEvent.getEventDate(), formatter));
+        }
+
         if (updatedEvent.getStateAction() != null) {
             if (updatedEvent.getStateAction().equals(StateAction.PUBLISH_EVENT.name().toUpperCase())) {
+                validPublishEventDate(eventById, now);
                 if (eventById.getState().equals(States.PENDING)) {
                     eventById.setState(States.PUBLISHED);
                     eventById.setPublishedOn(LocalDateTime.now());
@@ -110,10 +128,41 @@ public class AdminEventService {
         return states;
     }
 
-    private void validEventDate(Event event, LocalDateTime time) {
+    private void validPublishEventDate(Event event, LocalDateTime time) {
         if (time.plusHours(1).minusSeconds(5).isAfter(event.getEventDate())) {
             throw new IncorrectParamException("Field: eventDate. Error: должно содержать дату," +
                     " которая еще не наступила. Value: " + event.getEventDate());
+        }
+    }
+
+    private void validEventDate(String stringEventDate, LocalDateTime time) {
+        LocalDateTime eventDate = LocalDateTime.parse(stringEventDate,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        if (time.plusHours(2).minusSeconds(5).isAfter(eventDate)) {
+            throw new InvalidRequestException("Field: eventDate. Error: должно содержать дату," +
+                    " которая еще не наступила. Value: " + stringEventDate);
+        }
+    }
+
+    private void validDescription(String text) {
+        if (text == null || text.isBlank() || text.length() < 20 || text.length() > 7000) {
+            throw new InvalidRequestException("Field: description. Error: must not be null or blank, " +
+                    "or less than 20 or more than 7000 chars." + text);
+        }
+    }
+
+    private void validAnnotation(String text) {
+        if (text == null || text.isBlank() || text.length() < 20 || text.length() > 2000) {
+            throw new InvalidRequestException("Field: annotation. Error: must not be null or blank, or less than 20 " +
+                    "char."
+                    + text);
+        }
+    }
+
+    private void validTitle(String title) {
+        if (title == null || title.isBlank() || title.length() < 3 || title.length() > 120) {
+            throw new InvalidRequestException("Field: title. Error: must not be null or blank, " +
+                    "or less than 3 or more than 120 chars." + title);
         }
     }
 }
