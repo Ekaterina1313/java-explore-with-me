@@ -32,6 +32,15 @@ public class PrivateEventController {
     public EventFullDto create(@RequestBody EventDto eventDto, @PathVariable Integer userId) {
         LocalDateTime now = LocalDateTime.now();
         log.info("PRIVATE-controller: Поступил запрос на добавление нового события = " + eventDto.getId());
+        if (eventDto.getPaid() == null) {
+            eventDto.setPaid(false);
+        }
+        if (eventDto.getParticipantLimit() == null) {
+            eventDto.setParticipantLimit(0);
+        }
+        if (eventDto.getRequestModeration() == null) {
+            eventDto.setRequestModeration(true);
+        }
         validDescription(eventDto.getDescription());
         validAnnotation(eventDto.getAnnotation());
         validTitle(eventDto.getTitle());
