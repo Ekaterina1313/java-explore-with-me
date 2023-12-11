@@ -8,7 +8,6 @@ import ru.practicum.mainService.dto.EventDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.ParticipationRequestDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
-import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.error.InvalidRequestException;
 import ru.practicum.mainService.model.EventRequestStatusUpdateRequest;
 import ru.practicum.mainService.model.EventRequestStatusUpdateResult;

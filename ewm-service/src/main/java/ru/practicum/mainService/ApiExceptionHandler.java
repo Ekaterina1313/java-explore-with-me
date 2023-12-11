@@ -16,10 +16,10 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class ApiExceptionHandler {
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ApiError handleConflict(DataIntegrityViolationException ex) {
-        return new ApiError("CONFLICT",
+        return new ApiError("BAD_REQUEST",
                 "Integrity constraint has been violated.",
                 ex.getMessage());
     }
