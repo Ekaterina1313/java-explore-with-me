@@ -107,7 +107,7 @@ public class AdminEventService {
     }
 
     private void validEventDate(Event event, LocalDateTime time) {
-        if (time.plusHours(1).isAfter(event.getEventDate())) {
+        if (time.plusHours(1).minusSeconds(5).isAfter(event.getEventDate())) {
             throw new IncorrectParamException("Field: eventDate. Error: должно содержать дату," +
                     " которая еще не наступила. Value: " + event.getEventDate());
         }

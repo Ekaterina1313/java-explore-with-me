@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class ParticipationRequestDto {
     private String created;
-    private Integer eventId;
+    private Integer event;
     private Integer id;
-    private Integer requesterId;
+    private Integer requester;
     private String status;
 }

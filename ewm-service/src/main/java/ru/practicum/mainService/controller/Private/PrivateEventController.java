@@ -34,6 +34,7 @@ public class PrivateEventController {
         log.info("PRIVATE-controller: Поступил запрос на добавление нового события = " + eventDto.getId());
         validDescription(eventDto.getDescription());
         validAnnotation(eventDto.getAnnotation());
+        validTitle(eventDto.getTitle());
         validCategory(eventDto);
         validEventDate(eventDto.getEventDate(), now);
         validParticipantLimit(eventDto.getParticipantLimit());
@@ -79,6 +80,9 @@ public class PrivateEventController {
         }
         if (updatedEvent.getAnnotation() != null) {
             validAnnotation(updatedEvent.getAnnotation());
+        }
+        if (updatedEvent.getTitle() != null) {
+            validTitle(updatedEvent.getTitle());
         }
         if (updatedEvent.getEventDate() != null) {
             validEventDate(updatedEvent.getEventDate(), now);
@@ -133,9 +137,8 @@ public class PrivateEventController {
 
     private void validDescription(String text) {
         if (text == null || text.isBlank() || text.length() < 20 || text.length() > 7000) {
-            throw new InvalidRequestException("Field: description. Error: must not be null or blank, or less than 20 " +
-                    "char."
-                    + text);
+            throw new InvalidRequestException("Field: description. Error: must not be null or blank, " +
+                    "or less than 20 or more than 7000 chars." + text);
         }
     }
 
@@ -147,5 +150,11 @@ public class PrivateEventController {
         }
     }
 
+    private void validTitle(String title) {
+        if (title == null || title.isBlank() || title.length() < 3 || title.length() > 20) {
+            throw new InvalidRequestException("Field: title. Error: must not be null or blank, " +
+                    "or less than 3 or more than 2000 chars." + title);
+        }
+    }
 }
 
