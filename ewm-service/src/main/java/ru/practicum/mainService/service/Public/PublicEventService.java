@@ -15,7 +15,6 @@ import ru.practicum.mainService.mapper.EndpointHitMapper;
 import ru.practicum.mainService.mapper.EventMapper;
 import ru.practicum.mainService.model.EndpointHit;
 import ru.practicum.mainService.model.Event;
-import ru.practicum.mainService.model.States;
 import ru.practicum.mainService.repository.EventRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -31,8 +30,8 @@ public class PublicEventService {
     private final EventRepository eventRepository;
     private final RestTemplate restTemplate;
     private static final String app = "mainService/public";
+    //private static final String endpointUrl = "http://stats-server:9090/hit";
     private static final String endpointUrl = "http://stats-server:9090/hit";
-    //private static final String endpointUrl = "http://localhost:9090/hit";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public PublicEventService(EventRepository eventRepository, RestTemplate restTemplate) {
@@ -90,11 +89,10 @@ public class PublicEventService {
     public EventFullDto getById(Integer eventId, String clientIp, String endpointPath) {
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
-        if (!eventById.getState().equals(States.PUBLISHED)) {
+        /*if (!eventById.getState().equals(States.PUBLISHED)) {
             throw new EntityNotFoundException("Event with id=" + eventId + " is not published");
-        }
-
-        String path = "http://localhost:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
+        }*/
+        String path = "http://stats-server:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
         ParameterizedTypeReference<List<EndpointHit>> responseType = new ParameterizedTypeReference<>() {
         };
         ResponseEntity<List<EndpointHit>> response = restTemplate.exchange(path, HttpMethod.GET,
