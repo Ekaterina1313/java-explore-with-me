@@ -112,7 +112,7 @@ public class PrivateEventController {
     }
 
     private void validParticipantLimit(Integer limit) {
-        if (limit <= 0) {
+        if (limit < 0) {
             throw new InvalidRequestException("Field: ParticipantLimit. Error: must not be 0 or less. Value: " + limit);
         }
     }
