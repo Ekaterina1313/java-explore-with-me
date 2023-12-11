@@ -15,6 +15,7 @@ import ru.practicum.mainService.mapper.EndpointHitMapper;
 import ru.practicum.mainService.mapper.EventMapper;
 import ru.practicum.mainService.model.EndpointHit;
 import ru.practicum.mainService.model.Event;
+import ru.practicum.mainService.model.States;
 import ru.practicum.mainService.repository.EventRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -89,9 +90,9 @@ public class PublicEventService {
     public EventFullDto getById(Integer eventId, String clientIp, String endpointPath) {
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
-        /*if (!eventById.getState().equals(States.PUBLISHED)) {
+        if (!eventById.getState().equals(States.PUBLISHED)) {
             throw new EntityNotFoundException("Event with id=" + eventId + " is not published");
-        }*/
+        }
         String path = "http://stats-server:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
         ParameterizedTypeReference<List<EndpointHit>> responseType = new ParameterizedTypeReference<>() {
         };
