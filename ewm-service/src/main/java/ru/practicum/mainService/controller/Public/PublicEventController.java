@@ -28,9 +28,9 @@ public class PublicEventController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getEvents(
-            @RequestParam(name = "text") String text,
-            @RequestParam(name = "categories") List<Integer> categories,
-            @RequestParam(value = "paid") Boolean paid,
+            @RequestParam(name = "text", required = false) String text,
+            @RequestParam(name = "categories", required = false) List<Integer> categories,
+            @RequestParam(name = "paid", defaultValue = "false") Boolean paid,
             @RequestParam(name = "rangeStart", required = false) String rangeStart,
             @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
             @RequestParam(name = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,

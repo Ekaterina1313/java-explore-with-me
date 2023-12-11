@@ -8,6 +8,8 @@ import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
 import ru.practicum.mainService.service.Admin.AdminEventService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -15,7 +17,8 @@ import java.util.List;
 @RequestMapping("/admin/events")
 public class AdminEventController {
     private final AdminEventService eventService;
-
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    
     public AdminEventController(AdminEventService eventService) {
         this.eventService = eventService;
     }
@@ -23,14 +26,24 @@ public class AdminEventController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getEvents(
-            @RequestParam(name = "users") List<Integer> users,
-            @RequestParam(name = "states") List<String> states,
-            @RequestParam(name = "categories") List<Integer> categories,
+            @RequestParam(name = "users", required = false) List<Integer> users,
+            @RequestParam(name = "states", required = false) List<String> states,
+            @RequestParam(name = "categories", required = false) List<Integer> categories,
             @RequestParam(name = "rangeStart") String rangeStart,
             @RequestParam(value = "rangeEnd") String rangeEnd,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("ADMIN-controller: Поступил запрос на просмотр событий.");
+        if (rangeStart == null) {
+            rangeStart = LocalDateTime.now().format(formatter);
+        }
+        if (rangeEnd == null) {
+            rangeEnd = LocalDateTime.of(9999, 1, 1, 0, 0, 0)
+                    .format(formatter);
+        }
+        if (states == null) {
+            states = List.of("PUBLISHED", "PENDING", "CANCELED");
+        }
         try {
             return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
         } catch (DataIntegrityViolationException ex) {

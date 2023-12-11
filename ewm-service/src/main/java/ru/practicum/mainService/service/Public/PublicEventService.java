@@ -46,13 +46,14 @@ public class PublicEventService {
         Pageable pageable = PageRequest.of(from, size, Sort.by(Sort.Direction.DESC, sort));
         Page<Event> events;
         if (onlyAvailable) {
-            if (Objects.equals(text, "0") && Objects.equals(categories.get(0), 0)) {
+            if ((text == null || Objects.equals(text, "0")) &&
+                    (categories == null ||Objects.equals(categories.get(0), 0))) {
                 events = eventRepository.filteredWithoutTextAndCategoryOnlyAvailable(LocalDateTime.parse(rangeStart,
                         formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
-            } else if (Objects.equals(text, "0")) {
+            } else if (text == null || Objects.equals(text, "0")) {
                 events = eventRepository.filteredWithoutTextOnlyAvailable(categories, LocalDateTime.parse(rangeStart,
                         formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
-            } else if (Objects.equals(categories.get(0), 0)) {
+            } else if (categories == null || Objects.equals(categories.get(0), 0)) {
                 events = eventRepository.filteredWithoutCategoriesOnlyAvailable(text, LocalDateTime.parse(rangeStart,
                         formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
             } else {
@@ -61,13 +62,14 @@ public class PublicEventService {
             }
 
         } else {
-            if (Objects.equals(text, "0") && Objects.equals(categories.get(0), 0)) {
+            if ((text == null || Objects.equals(text, "0")) &&
+                    (categories == null || Objects.equals(categories.get(0), 0))) {
                 events = eventRepository.filteredWithoutTextAndCategoryNotAvailable(LocalDateTime.parse(rangeStart,
                         formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
-            } else if (Objects.equals(text, "0")) {
+            } else if (text == null || Objects.equals(text, "0")) {
                 events = eventRepository.filteredWithoutTextNotAvailable(categories, LocalDateTime.parse(rangeStart,
                         formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
-            } else if (Objects.equals(categories.get(0), 0)) {
+            } else if (categories == null || Objects.equals(categories.get(0), 0)) {
                 events = eventRepository.filteredWithoutCategoriesNotAvailable(text, LocalDateTime.parse(rangeStart,
                                 formatter),
                         LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
