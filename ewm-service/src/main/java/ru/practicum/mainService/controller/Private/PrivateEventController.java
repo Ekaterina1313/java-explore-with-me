@@ -32,8 +32,8 @@ public class PrivateEventController {
     public EventFullDto create(@RequestBody EventDto eventDto, @PathVariable Integer userId) {
         LocalDateTime now = LocalDateTime.now();
         log.info("PRIVATE-controller: Поступил запрос на добавление нового события = " + eventDto.getId());
-        validDescriptionOrAnnotation(eventDto.getDescription());
-        validDescriptionOrAnnotation(eventDto.getAnnotation());
+        validDescription(eventDto.getDescription());
+        validAnnotation(eventDto.getAnnotation());
         validCategory(eventDto);
         validEventDate(eventDto.getEventDate(), now);
         validParticipantLimit(eventDto.getParticipantLimit());
@@ -75,10 +75,10 @@ public class PrivateEventController {
         log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = " + userId +
                 " пользователем с id = " + updatedEvent.getId());
         if (updatedEvent.getDescription() != null) {
-            validDescriptionOrAnnotation(updatedEvent.getDescription());
+            validDescription(updatedEvent.getDescription());
         }
         if (updatedEvent.getAnnotation() != null) {
-            validDescriptionOrAnnotation(updatedEvent.getAnnotation());
+            validAnnotation(updatedEvent.getAnnotation());
         }
         if (updatedEvent.getEventDate() != null) {
             validEventDate(updatedEvent.getEventDate(), now);
@@ -131,13 +131,21 @@ public class PrivateEventController {
         }
     }
 
-    private void validDescriptionOrAnnotation(String text) {
-        if (text == null || text.isBlank() || text.length() < 20) {
+    private void validDescription(String text) {
+        if (text == null || text.isBlank() || text.length() < 20 || text.length() > 7000) {
             throw new InvalidRequestException("Field: description. Error: must not be null or blank, or less than 20 " +
                     "char."
                     + text);
         }
     }
 
+    private void validAnnotation(String text) {
+        if (text == null || text.isBlank() || text.length() < 20 || text.length() > 2000) {
+            throw new InvalidRequestException("Field: annotation. Error: must not be null or blank, or less than 20 " +
+                    "char."
+                    + text);
+        }
+    }
 
 }
+
