@@ -132,8 +132,9 @@ public class PrivateEventController {
     }
 
     private void validDescriptionOrAnnotation(String text) {
-        if (text == null || text.isBlank()) {
-            throw new InvalidRequestException("Field: description. Error: must not be null or blank. Value: "
+        if (text == null || text.isBlank() || text.length() < 20) {
+            throw new InvalidRequestException("Field: description. Error: must not be null or blank, or less than 20 " +
+                    "char."
                     + text);
         }
     }
