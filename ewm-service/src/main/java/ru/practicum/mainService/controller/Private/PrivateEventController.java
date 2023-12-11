@@ -71,7 +71,7 @@ public class PrivateEventController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto update(@PathVariable Integer userId, @PathVariable Integer eventId,
                                @RequestBody UpdatedEventDto updatedEvent) {
-        LocalDateTime now = LocalDateTime.now().minusSeconds(5);
+        LocalDateTime now = LocalDateTime.now();
         log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = " + userId +
                 " пользователем с id = " + updatedEvent.getId());
         if (updatedEvent.getDescription() != null) {
@@ -125,7 +125,7 @@ public class PrivateEventController {
     private void validEventDate(String stringEventDate, LocalDateTime time) {
         LocalDateTime eventDate = LocalDateTime.parse(stringEventDate,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        if (time.plusHours(2).isAfter(eventDate)) {
+        if (time.isAfter(eventDate)) {
             throw new InvalidRequestException("Field: eventDate. Error: должно содержать дату," +
                     " которая еще не наступила. Value: " + stringEventDate);
         }
