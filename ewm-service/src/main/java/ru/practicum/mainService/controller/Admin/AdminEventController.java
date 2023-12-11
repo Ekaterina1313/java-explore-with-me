@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
-import ru.practicum.mainService.error.InvalidRequestException;
 import ru.practicum.mainService.service.Admin.AdminEventService;
 
 import java.util.List;
