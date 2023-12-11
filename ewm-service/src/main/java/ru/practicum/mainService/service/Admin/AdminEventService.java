@@ -66,27 +66,31 @@ public class AdminEventService {
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
         validEventDate(eventById, now);
-        if (updatedEvent.getStateAction().equals(StateAction.PUBLISH_EVENT.name().toUpperCase())) {
-            if (eventById.getState().equals(States.PENDING)) {
-                eventById.setState(States.PUBLISHED);
-                eventById.setPublishedOn(LocalDateTime.now());
-                Event updateEvent = eventRepository.save(eventById);
-                return EventMapper.toEventFullDto(updateEvent);
+        if (updatedEvent.getStateAction() != null) {
+            if (updatedEvent.getStateAction().equals(StateAction.PUBLISH_EVENT.name().toUpperCase())) {
+                if (eventById.getState().equals(States.PENDING)) {
+                    eventById.setState(States.PUBLISHED);
+                    eventById.setPublishedOn(LocalDateTime.now());
+                    Event updateEvent = eventRepository.save(eventById);
+                    return EventMapper.toEventFullDto(updateEvent);
+                } else {
+                    throw new IncorrectParamException("Cannot publish the event because it's not in the right state: " +
+                            eventById.getState().name());
+                }
+            } else if (updatedEvent.getStateAction().equals(StateAction.REJECT_EVENT.name().toUpperCase())) {
+                if (eventById.getState().equals(States.PUBLISHED)) {
+                    throw new IncorrectParamException("Cannot reject the event because it's not in the right state: " +
+                            eventById.getState().name());
+                } else {
+                    eventById.setState(States.CANCELED);
+                    Event updateEvent = eventRepository.save(eventById);
+                    return EventMapper.toEventFullDto(updateEvent);
+                }
             } else {
-                throw new IncorrectParamException("Cannot publish the event because it's not in the right state: " +
-                        eventById.getState().name());
-            }
-        } else if (updatedEvent.getStateAction().equals(StateAction.REJECT_EVENT.name().toUpperCase())) {
-            if (eventById.getState().equals(States.PUBLISHED)) {
-                throw new IncorrectParamException("Cannot reject the event because it's not in the right state: " +
-                        eventById.getState().name());
-            } else {
-                eventById.setState(States.CANCELED);
-                Event updateEvent = eventRepository.save(eventById);
-                return EventMapper.toEventFullDto(updateEvent);
+                throw new InvalidRequestException("Неверно указано поле 'stateAction'.");
             }
         } else {
-            throw new InvalidRequestException("Неверно указано поле 'stateAction'.");
+            return EventMapper.toEventFullDto(eventById);
         }
     }
 

@@ -44,9 +44,9 @@ public class AdminEventController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto update(@PathVariable Integer eventId, @RequestBody UpdatedEventDto updatedEvent) {
         log.info("ADMIN-controller: Поступил запрос на обновление события с id = " + eventId);
-        if (updatedEvent.getStateAction() == null) {
+        /*if (updatedEvent.getStateAction() == null) {
             throw new InvalidRequestException("Поле stateAction не должно быть = null");
-        }
+        }*/
         return eventService.update(eventId, updatedEvent);
     }
 }
