@@ -59,7 +59,6 @@ public class PublicEventService {
             rangeEnd = LocalDateTime.of(999_999_998, 1, 1, 0, 0, 0)
                     .format(formatter);
         }
-        
         EndpointHit endpointHit = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);
         restTemplate.postForObject(endpointUrl, endpointHit, String.class);
 
