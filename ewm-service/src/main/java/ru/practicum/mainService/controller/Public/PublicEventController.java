@@ -5,9 +5,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.EventFullDto;
+import ru.practicum.mainService.error.IncorrectParamException;
+import ru.practicum.mainService.error.InvalidRequestException;
 import ru.practicum.mainService.service.Public.PublicEventService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -15,6 +19,7 @@ import java.util.List;
 @RequestMapping("/events")
 public class PublicEventController {
     private final PublicEventService eventService;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public PublicEventController(PublicEventService eventService) {
         this.eventService = eventService;
@@ -38,6 +43,27 @@ public class PublicEventController {
         log.info("client ip: {}", clientIp);
         String endpointPath = request.getRequestURI();
         log.info("endpoint path: {}", endpointPath);
+        if (rangeStart != null && rangeEnd != null) {
+            if (LocalDateTime.parse(rangeStart, formatter).isAfter(LocalDateTime.parse(rangeEnd, formatter))) {
+                throw new InvalidRequestException("Время начала события не должно позже времени его окончания.");
+            }
+        }
+        if (rangeStart == null) {
+            rangeStart = LocalDateTime.now().format(formatter);
+        }
+        if (rangeEnd == null) {
+            rangeEnd = LocalDateTime.of(9999, 1, 1, 0, 0, 0)
+                    .format(formatter);
+        }
+        sort = sort.toLowerCase();
+        if (sort.equals("views")) {
+            sort = "views";
+        } else if (sort.equals("event_date")) {
+            sort = "eventDate";
+        } else {
+            throw new IncorrectParamException("Поле sort должно принимать значение EVENT_DATE или VIEWS," +
+                    " текущее значение sort = " + sort);
+        }
         try {
             return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size,
                     clientIp, endpointPath);

@@ -39,4 +39,11 @@ public class StatsController {
         List<ViewStats> statistics = statsService.getStats(startTime, endTime, uris, unique);
         return ResponseEntity.ok(statistics);
     }
+
+    @GetMapping("/endpointHits")
+    public ResponseEntity<List<EndpointHit>> getEndpointHits(@RequestParam("uri") String uri,
+                                                             @RequestParam("clientIp") String clientIp) {
+        List<EndpointHit> endpointHits = statsService.getEndpointHits(uri, clientIp);
+        return ResponseEntity.ok(endpointHits);
+    }
 }

@@ -52,4 +52,6 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
+
+    List<EndpointHit> findAllByUriAndIp(String uri, String ip);
 }

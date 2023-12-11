@@ -1,14 +1,16 @@
 package ru.practicum.mainService.service.Public;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.mainService.dto.EventFullDto;
-import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.mapper.EndpointHitMapper;
 import ru.practicum.mainService.mapper.EventMapper;
 import ru.practicum.mainService.model.EndpointHit;
@@ -29,10 +31,9 @@ public class PublicEventService {
     private final EventRepository eventRepository;
     private final RestTemplate restTemplate;
     private static final String app = "mainService/public";
-    private static final String endpointUrl = "http://stats-server:9090/hit";
-    //private static final String endpointUrl = "http://localhost:9090/hit";
+    //private static final String endpointUrl = "http://stats-server:9090/hit";
+    private static final String endpointUrl = "http://localhost:9090/hit";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
 
     public PublicEventService(EventRepository eventRepository, RestTemplate restTemplate) {
         this.eventRepository = eventRepository;
@@ -42,28 +43,7 @@ public class PublicEventService {
     public List<EventFullDto> getEvents(String text, List<Integer> categories, Boolean paid, String rangeStart,
                                         String rangeEnd, Boolean onlyAvailable, String sort, int from, int size,
                                         String clientIp, String endpointPath) {
-        sort = sort.toLowerCase();
-        if (sort.equals("views")) {
-            sort = "views";
-        } else if (sort.equals("event_date")) {
-            sort = "eventDate";
-        } else {
-            throw new IncorrectParamException("Поле sort должно принимать значение EVENT_DATE или VIEWS," +
-                    " текущее значение sort = " + sort);
-        }
-
-        if (rangeStart == null) {
-            rangeStart = LocalDateTime.now().format(formatter);
-        }
-        if (rangeEnd == null) {
-            rangeEnd = LocalDateTime.of(9999, 1, 1, 0, 0, 0)
-                    .format(formatter);
-        }
-        EndpointHit endpointHit = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);
-        restTemplate.postForObject(endpointUrl, endpointHit, String.class);
-
         Pageable pageable = PageRequest.of(from, size, Sort.by(Sort.Direction.DESC, sort));
-        LocalDateTime now = LocalDateTime.now();
         Page<Event> events;
         if (onlyAvailable) {
             if (Objects.equals(text, "0") && Objects.equals(categories.get(0), 0)) {
@@ -98,11 +78,9 @@ public class PublicEventService {
             }
         }
 
-        List<Integer> eventIds = events.getContent()
-                .stream()
-                .map(Event::getId)
-                .collect(Collectors.toList());
-        eventRepository.incrementViews(eventIds);
+        EndpointHit endpointHit = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);
+        restTemplate.postForObject(endpointUrl, endpointHit, String.class);
+
         return events.getContent()
                 .stream()
                 .map(EventMapper::toEventFullDto)
@@ -115,9 +93,18 @@ public class PublicEventService {
         if (!eventById.getState().equals(States.PUBLISHED)) {
             throw new EntityNotFoundException("Event with id=" + eventId + " is not published");
         }
+
+        String path = "http://localhost:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
+        ParameterizedTypeReference<List<EndpointHit>> responseType = new ParameterizedTypeReference<>() {
+        };
+        ResponseEntity<List<EndpointHit>> response = restTemplate.exchange(path, HttpMethod.GET,
+                null, responseType);
+        if (Objects.requireNonNull(response.getBody()).isEmpty()) {
+            eventRepository.incrementViews(List.of(eventId));
+        }
+
         EndpointHit endpointHitDto = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);
         restTemplate.postForObject(endpointUrl, endpointHitDto, String.class);
-        eventRepository.incrementViews(List.of(eventId));
         return EventMapper.toEventFullDto(eventById);
     }
 }

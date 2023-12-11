@@ -35,4 +35,8 @@ public class StatsService {
             }
         }
     }
+
+    public List<EndpointHit> getEndpointHits(String uri, String clientIp) {
+        return statsRepository.findAllByUriAndIp(uri, clientIp);
+    }
 }
