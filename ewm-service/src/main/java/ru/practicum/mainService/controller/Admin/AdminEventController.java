@@ -18,7 +18,7 @@ import java.util.List;
 public class AdminEventController {
     private final AdminEventService eventService;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    
+
     public AdminEventController(AdminEventService eventService) {
         this.eventService = eventService;
     }

@@ -38,7 +38,7 @@ public class AdminEventService {
                                         String rangeStart, String rangeEnd, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
         Page<Event> events;
-        if ((users == null || users.get(0)== 0) && (categories == null || categories.get(0) == 0)) {
+        if ((users == null || users.get(0) == 0) && (categories == null || categories.get(0) == 0)) {
             events = eventRepository.getFilteredEventsWithoutUsersAndCategories(getStates(states),
                     LocalDateTime.parse(rangeStart, formatter),
                     LocalDateTime.parse(rangeEnd, formatter), pageable);
