@@ -151,9 +151,9 @@ public class PrivateEventController {
     }
 
     private void validTitle(String title) {
-        if (title == null || title.isBlank() || title.length() < 3 || title.length() > 20) {
+        if (title == null || title.isBlank() || title.length() < 3 || title.length() > 120) {
             throw new InvalidRequestException("Field: title. Error: must not be null or blank, " +
-                    "or less than 3 or more than 2000 chars." + title);
+                    "or less than 3 or more than 120 chars." + title);
         }
     }
 }
