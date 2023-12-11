@@ -125,7 +125,7 @@ public class PrivateEventController {
     private void validEventDate(String stringEventDate, LocalDateTime time) {
         LocalDateTime eventDate = LocalDateTime.parse(stringEventDate,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        if (time.isAfter(eventDate)) {
+        if (time.plusHours(2).minusSeconds(5).isAfter(eventDate)) {
             throw new InvalidRequestException("Field: eventDate. Error: должно содержать дату," +
                     " которая еще не наступила. Value: " + stringEventDate);
         }
