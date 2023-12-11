@@ -30,11 +30,11 @@ public class PrivateRequestService {
         this.eventRepository = eventRepository;
     }
 
-    public ParticipationRequestDto create(Integer userId, ParticipationRequestDto dto) {
+    public ParticipationRequestDto create(Integer userId, Integer eventId) {
         User userById = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User with id=" + userId + " was not found"));
-        Event eventById = eventRepository.findById(dto.getEventId())
-                .orElseThrow(() -> new EntityNotFoundException("Event with id=" + dto.getEventId() + " was not found"));
+        Event eventById = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
         if (Objects.equals(eventById.getInitiator().getId(), userId)) {
             throw new IncorrectParamException("Нельзя подать заявку на участие в собственном событии.");
         }

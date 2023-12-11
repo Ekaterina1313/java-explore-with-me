@@ -21,10 +21,10 @@ public class PrivateRequestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParticipationRequestDto created(@PathVariable Integer userId, @RequestBody ParticipationRequestDto dto) {
+    public ParticipationRequestDto created(@PathVariable Integer userId, @RequestParam Integer eventId) {
         log.info("PRIVATE-controller: Поступил запрос на добавление request от пользователя с id = " + userId);
         try {
-            return requestService.create(userId, dto);
+            return requestService.create(userId, eventId);
         } catch (DataIntegrityViolationException ex) {
             log.error("PRIVATE-controller: Error creating participationRequest", ex);
             throw ex;

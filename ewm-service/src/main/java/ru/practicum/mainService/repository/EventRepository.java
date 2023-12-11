@@ -84,48 +84,44 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
             "AND e.participantLimit > e.confirmedRequests " +
-            "AND e.eventDate > :now " +
+            "AND e.category.id IN :categories " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND e.paid = :paid")
-    Page<Event> findAllOnlyAvailable(@Param("paid") Boolean paid,
-                                     @Param("now") LocalDateTime now,
-                                     Pageable pageable);
+    Page<Event> filteredWithoutTextOnlyAvailable(
+            @Param("categories") List<Integer> categories,
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") Boolean paid,
+            Pageable pageable);
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
             "AND e.participantLimit > e.confirmedRequests " +
             "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
             "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
-            "AND e.eventDate > :now " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND e.paid = :paid")
-    Page<Event> findAllWithTextOnlyAvailable(@Param("text") String text,
-                                             @Param("paid") Boolean paid,
-                                             @Param("now") LocalDateTime now,
-                                             Pageable pageable);
-
-    @Query("SELECT e FROM Event e " +
-            "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
-            "AND e.category.id IN :categories " +
-            "AND e.eventDate > :now " +
-            "AND e.paid = :paid")
-    Page<Event> findAllWithCategoriesOnlyAvailable(@Param("categories") List<Integer> categories,
-                                                   @Param("paid") Boolean paid,
-                                                   @Param("now") LocalDateTime now,
-                                                   Pageable pageable);
+    Page<Event> filteredWithoutCategoriesOnlyAvailable(
+            @Param("text") String text,
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") Boolean paid,
+            Pageable pageable);
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
             "AND e.participantLimit > e.confirmedRequests " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND e.paid = :paid")
-    Page<Event> findAllWithStartAndEndOnlyAvailable(@Param("rangeStart") LocalDateTime rangeStart,
-                                                    @Param("rangeEnd") LocalDateTime rangeEnd,
-                                                    @Param("paid") Boolean paid,
-                                                    Pageable pageable);
+    Page<Event> filteredWithoutTextAndCategoryOnlyAvailable(
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") Boolean paid,
+            Pageable pageable);
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
+            "AND e.participantLimit = e.confirmedRequests " +
             "AND e.category.id IN :categories " +
             "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
             "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
@@ -141,43 +137,39 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
-            "AND e.eventDate > :now " +
-            "AND e.paid = :paid")
-    Page<Event> findAllNotAvailable(@Param("paid") Boolean paid,
-                                    @Param("now") LocalDateTime now,
-                                    Pageable pageable);
-
-    @Query("SELECT e FROM Event e " +
-            "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
-            "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
-            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
-            "AND e.eventDate > :now " +
-            "AND e.paid = :paid")
-    Page<Event> findAllWithTextNotAvailable(@Param("text") String text,
-                                            @Param("paid") Boolean paid,
-                                            @Param("now") LocalDateTime now,
-                                            Pageable pageable);
-
-    @Query("SELECT e FROM Event e " +
-            "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
+            "AND e.participantLimit = e.confirmedRequests " +
             "AND e.category.id IN :categories " +
-            "AND e.eventDate > :now " +
-            "AND e.paid = :paid")
-    Page<Event> findAllWithCategoriesNotAvailable(@Param("categories") List<Integer> categories,
-                                                  @Param("paid") Boolean paid,
-                                                  @Param("now") LocalDateTime now,
-                                                  Pageable pageable);
-
-    @Query("SELECT e FROM Event e " +
-            "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND e.paid = :paid")
-    Page<Event> findAllWithStartAndEndNotAvailable(@Param("rangeStart") LocalDateTime rangeStart,
-                                                   @Param("rangeEnd") LocalDateTime rangeEnd,
-                                                   @Param("paid") Boolean paid,
-                                                   Pageable pageable);
+    Page<Event> filteredWithoutTextNotAvailable(
+            @Param("categories") List<Integer> categories,
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") Boolean paid,
+            Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = 'PUBLISHED' " +
+            "AND e.participantLimit = e.confirmedRequests " +
+            "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
+            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
+            "AND e.paid = :paid")
+    Page<Event> filteredWithoutCategoriesNotAvailable(
+            @Param("text") String text,
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") Boolean paid,
+            Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = 'PUBLISHED' " +
+            "AND e.participantLimit = e.confirmedRequests " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
+            "AND e.paid = :paid")
+    Page<Event> filteredWithoutTextAndCategoryNotAvailable(
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") Boolean paid,
+            Pageable pageable);
 }

@@ -20,6 +20,7 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -58,44 +59,38 @@ public class PublicEventService {
         LocalDateTime now = LocalDateTime.now();
         Page<Event> events;
         if (onlyAvailable) {
-            if (text != null && !text.isBlank() && categories != null && !categories.isEmpty() &&
-                    rangeStart != null && rangeEnd != null) {
-                events = eventRepository.filteredOnlyAvailable(text, categories,
-                        LocalDateTime.parse(rangeStart, formatter), LocalDateTime.parse(rangeEnd, formatter), paid,
-                        pageable);
-            } else if (text != null && !text.isBlank() &&
-                    rangeStart == null && rangeEnd == null && categories == null) {
-                events = eventRepository.findAllWithTextOnlyAvailable(text, paid, now, pageable);
-            } else if (categories != null && !categories.isEmpty() &&
-                    text == null && rangeStart == null && rangeEnd == null) {
-                events = eventRepository.findAllWithCategoriesOnlyAvailable(categories, paid, now, pageable);
-            } else if (rangeStart != null && rangeEnd != null &&
-                    categories == null && text == null) {
-                events = eventRepository.findAllWithStartAndEndOnlyAvailable(LocalDateTime.parse(rangeStart, formatter),
-                        LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+            if (Objects.equals(text, "0") && Objects.equals(categories.get(0), 0)) {
+                events = eventRepository.filteredWithoutTextAndCategoryOnlyAvailable(LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+            } else if (Objects.equals(text, "0")) {
+                events = eventRepository.filteredWithoutTextOnlyAvailable(categories, LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+            } else if (Objects.equals(categories.get(0), 0)) {
+                events = eventRepository.filteredWithoutCategoriesOnlyAvailable(text, LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
             } else {
-                events = eventRepository.findAllOnlyAvailable(paid, now, pageable);
+                events = eventRepository.filteredOnlyAvailable(text, categories, LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
             }
+
         } else {
-            if (text != null && !text.isBlank() && categories != null && !categories.isEmpty() &&
-                    rangeStart != null && rangeEnd != null) {
-                events = eventRepository.filteredNotAvailable(text, categories,
-                        LocalDateTime.parse(rangeStart, formatter), LocalDateTime.parse(rangeEnd, formatter), paid,
-                        pageable);
-            } else if (text != null && !text.isBlank() &&
-                    rangeEnd == null && rangeStart == null && categories == null) {
-                events = eventRepository.findAllWithTextNotAvailable(text, paid, now, pageable);
-            } else if (categories != null && !categories.isEmpty() &&
-                    text == null && rangeStart == null && rangeEnd == null) {
-                events = eventRepository.findAllWithCategoriesNotAvailable(categories, paid, now, pageable);
-            } else if (rangeStart != null && rangeEnd != null &&
-                    categories == null && text == null) {
-                events = eventRepository.findAllWithStartAndEndNotAvailable(LocalDateTime.parse(rangeStart, formatter),
+            if (Objects.equals(text, "0") && Objects.equals(categories.get(0), 0)) {
+                events = eventRepository.filteredWithoutTextAndCategoryNotAvailable(LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+            } else if (Objects.equals(text, "0")) {
+                events = eventRepository.filteredWithoutTextNotAvailable(categories, LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+            } else if (Objects.equals(categories.get(0), 0)) {
+                events = eventRepository.filteredWithoutCategoriesNotAvailable(text, LocalDateTime.parse(rangeStart,
+                                formatter),
                         LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
             } else {
-                events = eventRepository.findAllNotAvailable(paid, now, pageable);
+                events = eventRepository.filteredNotAvailable(text, categories, LocalDateTime.parse(rangeStart,
+                                formatter),
+                        LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
             }
         }
+
         List<Integer> eventIds = events.getContent()
                 .stream()
                 .map(Event::getId)

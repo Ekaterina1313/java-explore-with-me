@@ -23,13 +23,13 @@ public class PublicEventController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getEvents(
-            @RequestParam(name = "text", required = false) String text,
-            @RequestParam(name = "categories", required = false) List<Integer> categories,
-            @RequestParam(value = "paid", defaultValue = "false") Boolean paid,
-            @RequestParam(name = "rangeStart", required = false) String rangeStart,
-            @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
+            @RequestParam(name = "text") String text,
+            @RequestParam(name = "categories") List<Integer> categories,
+            @RequestParam(value = "paid") Boolean paid,
+            @RequestParam(name = "rangeStart") String rangeStart,
+            @RequestParam(value = "rangeEnd") String rangeEnd,
             @RequestParam(value = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,
-            @RequestParam(value = "sort", defaultValue = "VIEWS") String sort,
+            @RequestParam(value = "sort") String sort,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size,
             HttpServletRequest request) {
