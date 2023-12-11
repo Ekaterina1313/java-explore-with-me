@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
+import ru.practicum.mainService.error.InvalidRequestException;
 import ru.practicum.mainService.service.Admin.AdminEventService;
 
 import java.util.List;
@@ -43,6 +44,9 @@ public class AdminEventController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto update(@PathVariable Integer eventId, @RequestBody UpdatedEventDto updatedEvent) {
         log.info("ADMIN-controller: Поступил запрос на обновление события с id = " + eventId);
+        if (updatedEvent.getStateAction() == null) {
+            throw new InvalidRequestException("Поле stateAction не должно быть = null");
+        }
         return eventService.update(eventId, updatedEvent);
     }
 }

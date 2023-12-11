@@ -41,7 +41,8 @@ public class PrivateRequestService {
         if (!eventById.getState().equals(States.PUBLISHED)) {
             throw new IncorrectParamException("Нельзя участвовать в неопубликованном событии.");
         }
-        if (Objects.equals(eventById.getParticipantLimit(), eventById.getConfirmedRequests())) {
+        if (eventById.getParticipantLimit() != 0 && Objects.equals(eventById.getParticipantLimit(),
+                eventById.getConfirmedRequests())) {
             throw new IncorrectParamException("В выбранном мероприятии не осталось свободных мест.");
         }
         Status status = Status.PENDING;
@@ -52,7 +53,7 @@ public class PrivateRequestService {
             eventRepository.save(eventById);
         }
         if (eventById.getParticipantLimit() == 0) {
-            status = Status.REJECTED;
+            status = Status.CONFIRMED;
         }
         ParticipationRequest participationRequest = ParticipationRequestMapper.toParticipationRequest(null,
                 LocalDateTime.now(), eventById, userById, status);
