@@ -47,7 +47,7 @@ public class PublicEventService {
         Page<Event> events;
         if (onlyAvailable) {
             if ((text == null || Objects.equals(text, "0")) &&
-                    (categories == null ||Objects.equals(categories.get(0), 0))) {
+                    (categories == null || Objects.equals(categories.get(0), 0))) {
                 events = eventRepository.filteredWithoutTextAndCategoryOnlyAvailable(LocalDateTime.parse(rangeStart,
                         formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
             } else if (text == null || Objects.equals(text, "0")) {
