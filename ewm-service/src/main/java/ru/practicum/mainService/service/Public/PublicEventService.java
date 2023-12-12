@@ -21,6 +21,7 @@ import ru.practicum.mainService.repository.EventRepository;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -45,38 +46,45 @@ public class PublicEventService {
                                         String clientIp, String endpointPath) {
         Pageable pageable = PageRequest.of(from, size, Sort.by(Sort.Direction.DESC, sort));
         Page<Event> events;
+        List<Boolean> listOfPaid = new ArrayList<>();
+        if (paid == null) {
+            listOfPaid.add(true);
+            listOfPaid.add(false);
+        } else {
+            listOfPaid.add(paid);
+        }
         if (onlyAvailable) {
             if ((text == null || Objects.equals(text, "0")) &&
                     (categories == null || Objects.equals(categories.get(0), 0))) {
                 events = eventRepository.filteredWithoutTextAndCategoryOnlyAvailable(LocalDateTime.parse(rangeStart,
-                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
             } else if (text == null || Objects.equals(text, "0")) {
                 events = eventRepository.filteredWithoutTextOnlyAvailable(categories, LocalDateTime.parse(rangeStart,
-                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
             } else if (categories == null || Objects.equals(categories.get(0), 0)) {
                 events = eventRepository.filteredWithoutCategoriesOnlyAvailable(text, LocalDateTime.parse(rangeStart,
-                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
             } else {
                 events = eventRepository.filteredOnlyAvailable(text, categories, LocalDateTime.parse(rangeStart,
-                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
             }
 
         } else {
             if ((text == null || Objects.equals(text, "0")) &&
                     (categories == null || Objects.equals(categories.get(0), 0))) {
                 events = eventRepository.filteredWithoutTextAndCategoryNotAvailable(LocalDateTime.parse(rangeStart,
-                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
             } else if (text == null || Objects.equals(text, "0")) {
                 events = eventRepository.filteredWithoutTextNotAvailable(categories, LocalDateTime.parse(rangeStart,
-                        formatter), LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
             } else if (categories == null || Objects.equals(categories.get(0), 0)) {
                 events = eventRepository.filteredWithoutCategoriesNotAvailable(text, LocalDateTime.parse(rangeStart,
                                 formatter),
-                        LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+                        LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
             } else {
                 events = eventRepository.filteredNotAvailable(text, categories, LocalDateTime.parse(rangeStart,
                                 formatter),
-                        LocalDateTime.parse(rangeEnd, formatter), paid, pageable);
+                        LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
             }
         }
 
