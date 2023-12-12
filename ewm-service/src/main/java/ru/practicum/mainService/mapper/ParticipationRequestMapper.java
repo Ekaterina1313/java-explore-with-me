@@ -10,7 +10,7 @@ public class ParticipationRequestMapper {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     public static ParticipationRequest toParticipationRequest(Integer id, LocalDateTime created, Event event,
-                                                              User requester, States status) {
+                                                              User requester, RequestStatus status) {
         return new ParticipationRequest(
                 id,
                 created,

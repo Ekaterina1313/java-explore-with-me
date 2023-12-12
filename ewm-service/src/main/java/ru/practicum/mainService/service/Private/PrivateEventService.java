@@ -148,7 +148,7 @@ public class PrivateEventService {
             if (!element.getEvent().getId().equals(eventId)) {
                 throw new InvalidRequestException("Запрос с id = " + element.getId());
             }
-            if (!element.getStatus().equals(States.PENDING)) {
+            if (!element.getStatus().equals(RequestStatus.PENDING)) {
                 throw new InvalidRequestException("Request must have status PENDING");
             }
         }
@@ -157,17 +157,17 @@ public class PrivateEventService {
         if (request.getStatus().equalsIgnoreCase("CONFIRMED")) {
             for (ParticipationRequest element : requestsByEvent) {
                 if (Objects.equals(event.getParticipantLimit(), event.getConfirmedRequests())) {
-                    element.setStatus(States.CANCELED);
+                    element.setStatus(RequestStatus.CANCELED);
                     rejectedRequests.add(element);
                 } else {
-                    element.setStatus(States.APPROVED);
+                    element.setStatus(RequestStatus.CONFIRMED);
                     confirmedRequests.add(element);
                     event.setConfirmedRequests(event.getConfirmedRequests() + 1);
                 }
             }
         } else if (request.getStatus().equalsIgnoreCase("REJECTED")) {
             for (ParticipationRequest element : requestsByEvent) {
-                element.setStatus(States.CANCELED);
+                element.setStatus(RequestStatus.CANCELED);
                 rejectedRequests.add(element);
             }
         } else {

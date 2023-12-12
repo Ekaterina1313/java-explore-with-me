@@ -1,7 +1,7 @@
 package ru.practicum.mainService.model;
 
-public enum States {
+public enum RequestStatus {
+    CONFIRMED,
     PENDING,
-    PUBLISHED,
     CANCELED
 }

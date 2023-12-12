@@ -26,5 +26,5 @@ public class ParticipationRequest {
     @JoinColumn(name = "requester_id")
     private User requester;
     @Enumerated(EnumType.STRING)
-    private States status;
+    private RequestStatus status;
 }

@@ -45,15 +45,15 @@ public class PrivateRequestService {
                 eventById.getConfirmedRequests())) {
             throw new IncorrectParamException("В выбранном мероприятии не осталось свободных мест.");
         }
-        States status = States.PENDING;
+        RequestStatus status = RequestStatus.PENDING;
         if (!eventById.getRequestModeration()) {
-            status = States.APPROVED;
+            status = RequestStatus.CONFIRMED;
             Integer newConfirmedRequests = eventById.getConfirmedRequests() + 1;
             eventById.setConfirmedRequests(newConfirmedRequests);
             eventRepository.save(eventById);
         }
         if (eventById.getParticipantLimit() == 0) {
-            status = States.APPROVED;
+            status = RequestStatus.CONFIRMED;
         }
         ParticipationRequest participationRequest = ParticipationRequestMapper.toParticipationRequest(null,
                 LocalDateTime.now(), eventById, userById, status);
@@ -79,12 +79,12 @@ public class PrivateRequestService {
         if (!Objects.equals(request.getRequester().getId(), userId)) {
             throw new InvalidRequestException("Нельзя отменить чужую заявку на участие в мероприятии.");
         }
-        if (request.getStatus().equals(States.APPROVED)) {
+        if (request.getStatus().equals(RequestStatus.CONFIRMED)) {
             Integer confirmedRequest = request.getEvent().getConfirmedRequests() - 1;
             event.setConfirmedRequests(confirmedRequest);
             eventRepository.save(event);
         }
-        request.setStatus(States.CANCELED);
+        request.setStatus(RequestStatus.CANCELED);
         return ParticipationRequestMapper.toParticipationRequestDto(requestRepository.save(request));
     }
 }
