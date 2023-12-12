@@ -46,7 +46,9 @@ public class AdminCompilationController {
     @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto update(@PathVariable Integer compId, @RequestBody NewCompilationDto newCompilationDto) {
-        validTitle(newCompilationDto);
+        if (newCompilationDto.getTitle() != null) {
+            validTitle(newCompilationDto);
+        }
         return compilationService.update(compId, newCompilationDto);
     }
 
