@@ -79,9 +79,12 @@ public class PrivateRequestService {
         if (!Objects.equals(request.getRequester().getId(), userId)) {
             throw new InvalidRequestException("Нельзя отменить чужую заявку на участие в мероприятии.");
         }
-        Integer confirmedRequest = request.getEvent().getConfirmedRequests() - 1;
-        event.setConfirmedRequests(confirmedRequest);
-        eventRepository.save(event);
-        return ParticipationRequestMapper.toParticipationRequestDto(request);
+        if (request.getStatus().equals(Status.CONFIRMED)) {
+            Integer confirmedRequest = request.getEvent().getConfirmedRequests() - 1;
+            event.setConfirmedRequests(confirmedRequest);
+            eventRepository.save(event);
+        }
+        request.setStatus(Status.REJECTED);
+        return ParticipationRequestMapper.toParticipationRequestDto(requestRepository.save(request));
     }
 }
