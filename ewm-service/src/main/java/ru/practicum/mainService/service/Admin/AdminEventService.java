@@ -82,6 +82,9 @@ public class AdminEventService {
             validEventDate(updatedEvent.getEventDate(), now);
             eventById.setEventDate(LocalDateTime.parse(updatedEvent.getEventDate(), formatter));
         }
+        if (updatedEvent.getPaid() != null) {
+            eventById.setPaid(updatedEvent.getPaid());
+        }
 
         if (updatedEvent.getStateAction() != null) {
             if (updatedEvent.getStateAction().equals(StateAction.PUBLISH_EVENT.name().toUpperCase())) {
