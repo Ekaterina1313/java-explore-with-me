@@ -136,6 +136,10 @@ public class PrivateEventService {
                                                          EventRequestStatusUpdateRequest request) {
         getUserById(userId);
         Event event = getEventById(eventId);
+        if (event.getParticipantLimit() != 0 && Objects.equals(event.getParticipantLimit(),
+                event.getConfirmedRequests())) {
+            throw new IncorrectParamException("Достигнут лимит свободных мест.");
+        }
         if (!event.getInitiator().getId().equals(userId)) {
             throw new InvalidRequestException("Пользователь не является организатором события");
         }
