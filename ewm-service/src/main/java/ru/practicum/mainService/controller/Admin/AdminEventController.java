@@ -29,8 +29,8 @@ public class AdminEventController {
             @RequestParam(name = "users", required = false) List<Integer> users,
             @RequestParam(name = "states", required = false) List<String> states,
             @RequestParam(name = "categories", required = false) List<Integer> categories,
-            @RequestParam(name = "rangeStart") String rangeStart,
-            @RequestParam(value = "rangeEnd") String rangeEnd,
+            @RequestParam(name = "rangeStart", required = false) String rangeStart,
+            @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("ADMIN-controller: Поступил запрос на просмотр событий.");
