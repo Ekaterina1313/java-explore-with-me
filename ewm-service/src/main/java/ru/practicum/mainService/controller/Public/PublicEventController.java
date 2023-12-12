@@ -33,7 +33,7 @@ public class PublicEventController {
             @RequestParam(name = "paid", defaultValue = "true") Boolean paid,
             @RequestParam(name = "rangeStart", required = false) String rangeStart,
             @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
-            @RequestParam(name = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,
+            @RequestParam(name = "onlyAvailable", defaultValue = "true") Boolean onlyAvailable,
             @RequestParam(name = "sort", defaultValue = "VIEWS") String sort,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size,
