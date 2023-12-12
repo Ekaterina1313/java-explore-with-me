@@ -3,6 +3,7 @@ package ru.practicum.ewm.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.error.InvalidRequestException;
 import ru.practicum.ewm.model.EndpointHit;
 import ru.practicum.ewm.model.ViewStats;
 import ru.practicum.ewm.service.StatsService;
@@ -35,6 +36,9 @@ public class StatsController {
         DateTimeFormatter newFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startTime = LocalDateTime.parse(start, newFormatter);
         LocalDateTime endTime = LocalDateTime.parse(end, newFormatter);
+        if (startTime.isAfter(endTime)) {
+            throw new InvalidRequestException("Параметр start не должен быть позже end.");
+        }
 
         List<ViewStats> statistics = statsService.getStats(startTime, endTime, uris, unique);
         return ResponseEntity.ok(statistics);
