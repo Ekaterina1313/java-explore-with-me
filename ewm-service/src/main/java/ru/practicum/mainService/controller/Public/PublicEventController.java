@@ -30,10 +30,10 @@ public class PublicEventController {
     public List<EventFullDto> getEvents(
             @RequestParam(name = "text", required = false) String text,
             @RequestParam(name = "categories", required = false) List<Integer> categories,
-            @RequestParam(name = "paid", defaultValue = "false") Boolean paid,
+            @RequestParam(name = "paid", required = false) Boolean paid,
             @RequestParam(name = "rangeStart", required = false) String rangeStart,
             @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
-            @RequestParam(name = "onlyAvailable") Boolean onlyAvailable,
+            @RequestParam(name = "onlyAvailable", required = false) Boolean onlyAvailable,
             @RequestParam(name = "sort", defaultValue = "VIEWS") String sort,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size,
