@@ -157,7 +157,7 @@ public class PrivateEventService {
         if (request.getStatus().equalsIgnoreCase("CONFIRMED")) {
             for (ParticipationRequest element : requestsByEvent) {
                 if (Objects.equals(event.getParticipantLimit(), event.getConfirmedRequests())) {
-                    element.setStatus(RequestStatus.CANCELED);
+                    element.setStatus(RequestStatus.REJECTED);
                     rejectedRequests.add(element);
                 } else {
                     element.setStatus(RequestStatus.CONFIRMED);
@@ -167,7 +167,7 @@ public class PrivateEventService {
             }
         } else if (request.getStatus().equalsIgnoreCase("REJECTED")) {
             for (ParticipationRequest element : requestsByEvent) {
-                element.setStatus(RequestStatus.CANCELED);
+                element.setStatus(RequestStatus.REJECTED);
                 rejectedRequests.add(element);
             }
         } else {
