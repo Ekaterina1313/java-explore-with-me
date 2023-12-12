@@ -85,7 +85,9 @@ public class AdminEventService {
         if (updatedEvent.getPaid() != null) {
             eventById.setPaid(updatedEvent.getPaid());
         }
-
+        if (updatedEvent.getParticipantLimit() != null) {
+            eventById.setParticipantLimit(updatedEvent.getParticipantLimit());
+        }
         if (updatedEvent.getStateAction() != null) {
             if (updatedEvent.getStateAction().equals(StateAction.PUBLISH_EVENT.name().toUpperCase())) {
                 validPublishEventDate(eventById, now);
