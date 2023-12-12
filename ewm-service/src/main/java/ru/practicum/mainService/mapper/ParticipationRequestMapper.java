@@ -1,10 +1,7 @@
 package ru.practicum.mainService.mapper;
 
 import ru.practicum.mainService.dto.ParticipationRequestDto;
-import ru.practicum.mainService.model.Event;
-import ru.practicum.mainService.model.ParticipationRequest;
-import ru.practicum.mainService.model.Status;
-import ru.practicum.mainService.model.User;
+import ru.practicum.mainService.model.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +10,7 @@ public class ParticipationRequestMapper {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     public static ParticipationRequest toParticipationRequest(Integer id, LocalDateTime created, Event event,
-                                                              User requester, Status status) {
+                                                              User requester, States status) {
         return new ParticipationRequest(
                 id,
                 created,
