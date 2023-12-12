@@ -55,10 +55,13 @@ public class AdminCompilationService {
     public CompilationDto update(Integer compId, NewCompilationDto newCompilationDto) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new EntityNotFoundException("Compilation with id=" + compId + " was not found"));
-        compilation.setPinned(newCompilationDto.getPinned());
-        compilation.setTitle(newCompilationDto.getTitle());
+        if (newCompilationDto.getPinned() != null) {
+            compilation.setPinned(newCompilationDto.getPinned());
+        }
+        if (newCompilationDto.getTitle() != null) {
+            compilation.setTitle(newCompilationDto.getTitle());
+        }
         compilationRepository.save(compilation);
-
         List<EventCompilation> eventCompilations = eventCompilationRepository.findAllById(List.of(compId));
         List<Integer> newIds = newCompilationDto.getEvents();
         List<Integer> toSave = new ArrayList<>();

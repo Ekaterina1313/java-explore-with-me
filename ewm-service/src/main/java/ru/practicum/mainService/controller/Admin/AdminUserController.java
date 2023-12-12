@@ -25,12 +25,25 @@ public class AdminUserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@RequestBody UserDto userDto) {
         log.info("ADMIN-controller: Поступил запрос на добавление нового пользователя с email = " + userDto.getEmail());
-        if (userDto.getName() == null || userDto.getName().isBlank()) {
-            throw new InvalidRequestException("Field: name. Error: must not be blank. Value: null");
+        String email = userDto.getEmail();
+        if (userDto.getName() == null || userDto.getName().isBlank() ||
+                userDto.getName().length() < 2 || userDto.getName().length() > 250) {
+            throw new InvalidRequestException("Field: name. Error: must not be null or blank. Value: null");
+        }
+        if (email == null || email.isBlank() ||
+                email.length() < 6 || email.length() > 64) {
+            throw new InvalidRequestException("Field: email. Error: must not be null or blank. Value: null");
+        }
+        if (!email.contains("@")) {
+            throw new InvalidRequestException("Field: email. Error: must contain the @ symbol. Value: " + email);
+        }
+        String[] emailParts = email.split("@");
+        if (emailParts.length != 2 || emailParts[1].length() > 63) {
+            throw new InvalidRequestException("Field: email. Error: after @ should be no more than 63 characters." +
+                    " Value: " + email);
         }
         try {
-            UserDto createdUser = userService.create(userDto);
-            return createdUser;
+            return userService.create(userDto);
         } catch (DataIntegrityViolationException ex) {
             log.error("Error creating user", ex);
             throw ex;

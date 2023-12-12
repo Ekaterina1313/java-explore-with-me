@@ -25,6 +25,9 @@ public class AdminCompilationController {
     public CompilationDto create(@RequestBody NewCompilationDto newCompilationDto) {
         log.info("ADMIN-controller: Поступил запрос на добавление новой подборки: " + newCompilationDto.getTitle());
         validTitle(newCompilationDto);
+        if (newCompilationDto.getPinned() == null) {
+            newCompilationDto.setPinned(false);
+        }
         try {
             return compilationService.create(newCompilationDto);
         } catch (DataIntegrityViolationException ex) {

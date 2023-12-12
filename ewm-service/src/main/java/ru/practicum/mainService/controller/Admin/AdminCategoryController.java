@@ -24,8 +24,7 @@ public class AdminCategoryController {
         log.info("ADMIN-controller: Поступил запрос на добавление новой категории события = " + categoryDto.getName());
         validName(categoryDto);
         try {
-            CategoryDto createdCategory = categoryService.create(categoryDto);
-            return createdCategory;
+            return categoryService.create(categoryDto);
         } catch (DataIntegrityViolationException ex) {
             log.error("Error creating user", ex);
             throw ex;
@@ -53,7 +52,8 @@ public class AdminCategoryController {
     }
 
     private void validName(CategoryDto categoryDto) {
-        if (categoryDto.getName() == null || categoryDto.getName().isBlank()) {
+        if (categoryDto.getName() == null || categoryDto.getName().isBlank() ||
+                categoryDto.getName().length() > 50) {
             throw new InvalidRequestException("Field: name. Error: must not be blank. Value: null");
         }
     }
