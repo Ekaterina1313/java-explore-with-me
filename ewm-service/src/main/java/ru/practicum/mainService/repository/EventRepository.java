@@ -67,7 +67,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit = e.confirmedRequests " +
+            "AND e.participantLimit > e.confirmedRequests " +
             "AND e.category.id IN :categories " +
             "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
             "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
@@ -83,7 +83,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit = e.confirmedRequests " +
+            "AND e.participantLimit > e.confirmedRequests " +
             "AND e.category.id IN :categories " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND e.paid IN:paid")
@@ -96,7 +96,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit = e.confirmedRequests " +
+            "AND e.participantLimit > e.confirmedRequests " +
             "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
             "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
@@ -110,7 +110,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit = e.confirmedRequests " +
+            "AND e.participantLimit > e.confirmedRequests " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND e.paid IN :paid")
     Page<Event> filteredWithoutTextAndCategoryOnlyAvailable(
@@ -121,7 +121,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
+            "AND e.participantLimit = e.confirmedRequests " +
             "AND e.category.id IN :categories " +
             "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
             "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
@@ -137,7 +137,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
+            "AND e.participantLimit = e.confirmedRequests " +
             "AND e.category.id IN :categories " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND e.paid IN :paid")
@@ -150,7 +150,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
+            "AND e.participantLimit = e.confirmedRequests " +
             "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
             "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
@@ -164,7 +164,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND e.participantLimit > e.confirmedRequests " +
+            "AND e.participantLimit = e.confirmedRequests " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND e.paid IN :paid")
     Page<Event> filteredWithoutTextAndCategoryNotAvailable(
