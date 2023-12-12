@@ -33,6 +33,9 @@ public class AdminCompilationService {
 
     public CompilationDto create(NewCompilationDto newCompilationDto) {
         Compilation createdCompilation = compilationRepository.save(CompilationMapper.toCompilation(newCompilationDto));
+        if (newCompilationDto.getEvents() == null || newCompilationDto.getEvents().isEmpty()) {
+            return CompilationMapper.compilationDto(createdCompilation, new ArrayList<>());
+        }
         List<Event> events = eventRepository.findAllById(newCompilationDto.getEvents());
         List<EventShortDto> eventShortDtos = events.stream()
                 .map(EventMapper::toEventShortDto)
@@ -63,6 +66,14 @@ public class AdminCompilationService {
         }
         compilationRepository.save(compilation);
         List<EventCompilation> eventCompilations = eventCompilationRepository.findAllById(List.of(compId));
+        if (newCompilationDto.getEvents() == null) {
+            List<Event> eventsToReturn = eventCompilations.stream()
+                    .map(EventCompilation::getEvent)
+                    .collect(Collectors.toList());
+            return CompilationMapper.compilationDto(compilation, eventsToReturn.stream()
+                    .map(EventMapper::toEventShortDto)
+                    .collect(Collectors.toList()));
+        }
         List<Integer> newIds = newCompilationDto.getEvents();
         List<Integer> toSave = new ArrayList<>();
 
@@ -77,7 +88,9 @@ public class AdminCompilationService {
                 toRemove.add(elem.getEvent().getId());
             }
         }
-        eventCompilationRepository.deleteByEventIds(toRemove);
+        if (!toRemove.isEmpty()) {
+            eventCompilationRepository.deleteByEventIds(toRemove);
+        }
 
         for (Integer element : newIds) {
             if (!eventIds.contains(element)) {
