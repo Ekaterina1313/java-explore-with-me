@@ -33,7 +33,6 @@ public class PublicEventService {
     private final RestTemplate restTemplate;
     private static final String app = "mainService/public";
     private static final String endpointUrl = "http://stats-server:9090/hit";
-    //private static final String endpointUrl = "http://localhost:9090/hit";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public PublicEventService(EventRepository eventRepository, RestTemplate restTemplate) {
@@ -53,7 +52,22 @@ public class PublicEventService {
         } else {
             listOfPaid.add(paid);
         }
-        if (onlyAvailable) {
+        if (onlyAvailable == null) {
+            if ((text == null || Objects.equals(text, "0")) &&
+                    (categories == null || Objects.equals(categories.get(0), 0))) {
+                events = eventRepository.filteredWithoutTextAndCategory(LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
+            } else if (text == null || Objects.equals(text, "0")) {
+                events = eventRepository.filteredWithoutText(categories, LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
+            } else if (categories == null || Objects.equals(categories.get(0), 0)) {
+                events = eventRepository.filteredWithoutCategories(text, LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
+            } else {
+                events = eventRepository.filtered(text, categories, LocalDateTime.parse(rangeStart,
+                        formatter), LocalDateTime.parse(rangeEnd, formatter), listOfPaid, pageable);
+            }
+        } else if (onlyAvailable) {
             if ((text == null || Objects.equals(text, "0")) &&
                     (categories == null || Objects.equals(categories.get(0), 0))) {
                 events = eventRepository.filteredWithoutTextAndCategoryOnlyAvailable(LocalDateTime.parse(rangeStart,
@@ -104,7 +118,6 @@ public class PublicEventService {
             throw new EntityNotFoundException("Event with id=" + eventId + " is not published");
         }
         String path = "http://stats-server:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
-        //String path = "http://localhost:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
         ParameterizedTypeReference<List<EndpointHit>> responseType = new ParameterizedTypeReference<>() {
         };
         ResponseEntity<List<EndpointHit>> response = restTemplate.exchange(path, HttpMethod.GET,

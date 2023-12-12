@@ -172,4 +172,54 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             @Param("rangeEnd") LocalDateTime rangeEnd,
             @Param("paid") List<Boolean> paid,
             Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = 'PUBLISHED' " +
+            "AND e.category.id IN :categories " +
+            "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
+            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
+            "AND e.paid IN :paid")
+    Page<Event> filtered(
+            @Param("text") String text,
+            @Param("categories") List<Integer> categories,
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") List<Boolean> paid,
+            Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = 'PUBLISHED' " +
+            "AND e.category.id IN :categories " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
+            "AND e.paid IN :paid")
+    Page<Event> filteredWithoutText(
+            @Param("categories") List<Integer> categories,
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") List<Boolean> paid,
+            Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = 'PUBLISHED' " +
+            "AND (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
+            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
+            "AND e.paid IN :paid")
+    Page<Event> filteredWithoutCategories(
+            @Param("text") String text,
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") List<Boolean> paid,
+            Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = 'PUBLISHED' " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
+            "AND e.paid IN :paid")
+    Page<Event> filteredWithoutTextAndCategory(
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
+            @Param("paid") List<Boolean> paid,
+            Pageable pageable);
 }
