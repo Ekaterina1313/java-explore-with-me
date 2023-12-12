@@ -30,7 +30,7 @@ public class PublicEventController {
     public List<EventFullDto> getEvents(
             @RequestParam(name = "text", required = false) String text,
             @RequestParam(name = "categories", required = false) List<Integer> categories,
-            @RequestParam(name = "paid", defaultValue = "false") Boolean paid,
+            @RequestParam(name = "paid", defaultValue = "true") Boolean paid,
             @RequestParam(name = "rangeStart", required = false) String rangeStart,
             @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
             @RequestParam(name = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,
@@ -43,6 +43,7 @@ public class PublicEventController {
         log.info("client ip: {}", clientIp);
         String endpointPath = request.getRequestURI();
         log.info("endpoint path: {}", endpointPath);
+        log.info("Параметр size = " + size);
         if (rangeStart != null && rangeEnd != null) {
             if (LocalDateTime.parse(rangeStart, formatter).isAfter(LocalDateTime.parse(rangeEnd, formatter))) {
                 throw new InvalidRequestException("Время начала события не должно позже времени его окончания.");

@@ -27,7 +27,7 @@ public class AdminUserController {
         log.info("ADMIN-controller: Поступил запрос на добавление нового пользователя с email = " + userDto.getEmail());
         String email = userDto.getEmail();
         if (userDto.getName() == null || userDto.getName().isBlank() ||
-                userDto.getName().length() < 2 || userDto.getName().length() > 250) {
+                userDto.getName().length() < 2 || userDto.getName().length() > 254) {
             throw new InvalidRequestException("Field: name. Error: must not be null or blank. Value: null");
         }
         if (email == null || email.isBlank() ||
@@ -40,6 +40,10 @@ public class AdminUserController {
         String[] emailParts = email.split("@");
         if (emailParts.length != 2 || emailParts[1].length() > 63) {
             throw new InvalidRequestException("Field: email. Error: after @ should be no more than 63 characters." +
+                    " Value: " + email);
+        }
+        if (emailParts[0].length() > 64) {
+            throw new InvalidRequestException("Field: email. Error: before @ should be no more than 63 characters." +
                     " Value: " + email);
         }
         try {

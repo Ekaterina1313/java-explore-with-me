@@ -50,8 +50,10 @@ public class AdminCompilationController {
     }
 
     private void validTitle(NewCompilationDto newCompilationDto) {
-        if (newCompilationDto.getTitle() == null || newCompilationDto.getTitle().isBlank()) {
-            throw new InvalidRequestException("Field: title. Error: must not be blank. Value: null");
+        if (newCompilationDto.getTitle() == null || newCompilationDto.getTitle().isBlank() ||
+                newCompilationDto.getTitle().length() > 50) {
+            throw new InvalidRequestException("Field: title. Error: must not be blank or less than 50 symbols." +
+                    " Value: " + newCompilationDto.getTitle());
         }
     }
 }
