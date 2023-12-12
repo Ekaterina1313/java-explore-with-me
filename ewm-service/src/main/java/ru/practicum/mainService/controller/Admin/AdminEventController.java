@@ -34,7 +34,6 @@ public class AdminEventController {
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("ADMIN-controller: Поступил запрос на просмотр событий.");
-        log.info("параметр size = " + size);
         if (rangeStart == null) {
             rangeStart = LocalDateTime.now().format(formatter);
         }

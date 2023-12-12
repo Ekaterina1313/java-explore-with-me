@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
 import ru.practicum.mainService.error.IncorrectParamException;
@@ -13,9 +12,7 @@ import ru.practicum.mainService.mapper.EventMapper;
 import ru.practicum.mainService.model.Event;
 import ru.practicum.mainService.model.StateAction;
 import ru.practicum.mainService.model.States;
-import ru.practicum.mainService.repository.CategoryRepository;
 import ru.practicum.mainService.repository.EventRepository;
-import ru.practicum.mainService.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -29,8 +26,7 @@ public class AdminEventService {
     private final EventRepository eventRepository;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public AdminEventService(EventRepository eventRepository, UserRepository userRepository,
-                             CategoryRepository categoryRepository, RestTemplate restTemplate) {
+    public AdminEventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
 
@@ -42,6 +38,11 @@ public class AdminEventService {
             events = eventRepository.getFilteredEventsWithoutUsersAndCategories(getStates(states),
                     LocalDateTime.parse(rangeStart, formatter),
                     LocalDateTime.parse(rangeEnd, formatter), pageable);
+            System.out.println("параметр users = " + users);
+            System.out.println("параметр states = " + states);
+            System.out.println("параметр categories = " + categories);
+            System.out.println("параметр rangeStart = " + rangeStart);
+            System.out.println("параметр rangeEnd = " + rangeEnd);
         } else if (categories == null || categories.get(0) == 0) {
             events = eventRepository.getFilteredEventsWithoutCategories(users, getStates(states),
                     LocalDateTime.parse(rangeStart, formatter),

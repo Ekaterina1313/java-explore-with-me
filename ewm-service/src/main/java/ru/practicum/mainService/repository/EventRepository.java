@@ -18,7 +18,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             "WHERE e.initiator.id IN :userIds " +
             "AND e.state IN :states " +
             "AND e.category.id IN :categoryIds " +
-            "AND e.createdOn BETWEEN :start AND :end")
+            "AND e.eventDate BETWEEN :start AND :end")
     Page<Event> getFilteredEvents(
             @Param("userIds") List<Integer> userIds,
             @Param("states") List<States> states,
@@ -30,7 +30,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("SELECT e FROM Event e " +
             "WHERE e.state IN :states " +
             "AND e.category.id IN :categoryIds " +
-            "AND e.createdOn BETWEEN :start AND :end")
+            "AND e.eventDate BETWEEN :start AND :end")
     Page<Event> getFilteredEventsWithoutUsers(
             @Param("states") List<States> states,
             @Param("categoryIds") List<Integer> categoryIds,
@@ -41,7 +41,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("SELECT e FROM Event e " +
             "WHERE e.initiator.id IN :userIds " +
             "AND e.state IN :states " +
-            "AND e.createdOn BETWEEN :start AND :end")
+            "AND e.eventDate BETWEEN :start AND :end")
     Page<Event> getFilteredEventsWithoutCategories(
             @Param("userIds") List<Integer> userIds,
             @Param("states") List<States> states,
@@ -51,7 +51,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state IN :states " +
-            "AND e.createdOn BETWEEN :start AND :end")
+            "AND e.eventDate BETWEEN :start AND :end")
     Page<Event> getFilteredEventsWithoutUsersAndCategories(
             @Param("states") List<States> states,
             @Param("start") LocalDateTime start,
