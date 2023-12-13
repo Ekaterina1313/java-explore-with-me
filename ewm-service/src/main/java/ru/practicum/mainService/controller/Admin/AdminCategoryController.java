@@ -1,7 +1,6 @@
 package ru.practicum.mainService.controller.Admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.CategoryDto;
@@ -23,12 +22,7 @@ public class AdminCategoryController {
     public CategoryDto create(@RequestBody CategoryDto categoryDto) {
         log.info("ADMIN-controller: Поступил запрос на добавление новой категории события = {}", categoryDto.getName());
         validCategoryName(categoryDto);
-        try {
-            return categoryService.create(categoryDto);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("Error creating category", ex);
-            throw ex;
-        }
+        return categoryService.create(categoryDto);
     }
 
     @DeleteMapping("/{catId}")
@@ -43,12 +37,7 @@ public class AdminCategoryController {
     public CategoryDto update(@PathVariable Integer catId, @RequestBody CategoryDto categoryDto) {
         log.info("ADMIN-controller: Поступил запрос на обновление категории события = {}", catId);
         validCategoryName(categoryDto);
-        try {
-            return categoryService.update(catId, categoryDto);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("Error updating category", ex);
-            throw ex;
-        }
+        return categoryService.update(catId, categoryDto);
     }
 
     private void validCategoryName(CategoryDto categoryDto) {

@@ -1,7 +1,6 @@
 package ru.practicum.mainService.controller.Admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.GetFormatter;
@@ -43,12 +42,7 @@ public class AdminEventController {
         if (states == null) {
             states = List.of("PUBLISHED", "PENDING", "CANCELED");
         }
-        try {
-            return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("Error getting event", ex);
-            throw ex;
-        }
+        return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @PatchMapping("/{eventId}")

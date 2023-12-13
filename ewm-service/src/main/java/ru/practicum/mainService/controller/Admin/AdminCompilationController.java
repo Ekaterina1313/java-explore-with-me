@@ -1,7 +1,6 @@
 package ru.practicum.mainService.controller.Admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.CompilationDto;
@@ -28,12 +27,7 @@ public class AdminCompilationController {
         if (newCompilationDto.getPinned() == null) {
             newCompilationDto.setPinned(false);
         }
-        try {
-            return compilationService.create(newCompilationDto);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("Error creating compilation", ex);
-            throw ex;
-        }
+        return compilationService.create(newCompilationDto);
     }
 
     @DeleteMapping("/{compId}")

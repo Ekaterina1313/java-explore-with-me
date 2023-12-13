@@ -1,7 +1,6 @@
 package ru.practicum.mainService.controller.Private;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.EventDto;
@@ -56,12 +55,7 @@ public class PrivateEventController {
                                         @RequestParam(name = "from", defaultValue = "0") int from,
                                         @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("PRIVATE-controller: Поступил запрос на просмотр событий от пользователя с id = {}", userId);
-        try {
-            return eventService.getEvents(userId, from, size);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("PUBLIC-controller: Error getting event", ex);
-            throw ex;
-        }
+        return eventService.getEvents(userId, from, size);
     }
 
     @GetMapping("/{eventId}")
@@ -69,12 +63,7 @@ public class PrivateEventController {
     public EventFullDto getById(@PathVariable Integer userId, @PathVariable Integer eventId) {
         log.info("PRIVATE-controller: Поступил запрос на просмотр события с id = {}", eventId
                 + " пользователем  с id = " + userId);
-        try {
-            return eventService.getById(userId, eventId);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("PUBLIC-controller: Error getting event", ex);
-            throw ex;
-        }
+        return eventService.getById(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")
@@ -107,12 +96,7 @@ public class PrivateEventController {
     public List<ParticipationRequestDto> getRequests(@PathVariable Integer userId, @PathVariable Integer eventId) {
         log.info("PRIVATE-controller: Поступил запрос на просмотр события с id = {} пользователем  с id = {}",
                 eventId, userId);
-        try {
-            return eventService.getRequests(userId, eventId);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("PRIVATE-controller: Error getting request", ex);
-            throw ex;
-        }
+        return eventService.getRequests(userId, eventId);
     }
 
     @PatchMapping("/{eventId}/requests")

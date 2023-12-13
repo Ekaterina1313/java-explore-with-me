@@ -1,7 +1,6 @@
 package ru.practicum.mainService.controller.Public;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.GetFormatter;
@@ -65,13 +64,8 @@ public class PublicEventController {
             throw new IncorrectParamException("Поле sort должно принимать значение EVENT_DATE или VIEWS," +
                     " текущее значение sort = " + sort);
         }
-        try {
-            return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size,
-                    clientIp, endpointPath);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("PUBLIC-controller: Error getting events", ex);
-            throw ex;
-        }
+        return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size,
+                clientIp, endpointPath);
 
     }
 
@@ -81,11 +75,6 @@ public class PublicEventController {
         log.info("PUBLIC-controller: Поступил запрос на просмотр события с id = {}", id);
         String clientIp = request.getRemoteAddr();
         String endpointPath = request.getRequestURI();
-        try {
-            return eventService.getById(id, clientIp, endpointPath);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("PUBLIC-controller: Error getting event", ex);
-            throw ex;
-        }
+        return eventService.getById(id, clientIp, endpointPath);
     }
 }

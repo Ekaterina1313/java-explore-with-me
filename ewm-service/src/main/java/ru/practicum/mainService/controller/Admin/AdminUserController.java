@@ -1,7 +1,6 @@
 package ru.practicum.mainService.controller.Admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.UserDto;
@@ -31,12 +30,7 @@ public class AdminUserController {
             throw new InvalidRequestException("Field: name. Error: must not be null or blank " +
                     "or length > 250 or length < 2. Value = " + userDto.getName());
         }
-        try {
-            return userService.create(userDto);
-        } catch (DataIntegrityViolationException ex) {
-            log.error("Error creating user", ex);
-            throw ex;
-        }
+        return userService.create(userDto);
     }
 
     @GetMapping
