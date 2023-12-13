@@ -16,29 +16,18 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class ApiExceptionHandler {
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ApiError handleConflict(DataIntegrityViolationException ex) {
-        return new ApiError("CONFLICT",
+        return new ApiError("INTERNAL_SERVER_ERROR",
                 "Integrity constraint has been violated.",
                 ex.getMessage());
     }
 
-    @ExceptionHandler(value = {InvalidRequestException.class})
+    @ExceptionHandler(value = {InvalidRequestException.class, MethodArgumentTypeMismatchException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiError handleInvalidRequest(InvalidRequestException ex) {
-        return new ApiError(
-                HttpStatus.BAD_REQUEST.name(),
-                "Incorrectly made request.",
-                ex.getMessage()
-        );
-    }
-
-    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ApiError handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+    public ApiError handleInvalidRequest(Exception ex) {
         return new ApiError(
                 HttpStatus.BAD_REQUEST.name(),
                 "Incorrectly made request.",

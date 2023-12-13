@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.practicum.mainService.GetFormatter;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
 import ru.practicum.mainService.error.IncorrectParamException;
@@ -24,7 +25,6 @@ import java.util.stream.Collectors;
 @Service
 public class AdminEventService {
     private final EventRepository eventRepository;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public AdminEventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
@@ -36,8 +36,8 @@ public class AdminEventService {
         Page<Event> events;
         if ((users == null || users.get(0) == 0) && (categories == null || categories.get(0) == 0)) {
             events = eventRepository.getFilteredEventsWithoutUsersAndCategories(getStates(states),
-                    LocalDateTime.parse(rangeStart, formatter),
-                    LocalDateTime.parse(rangeEnd, formatter), pageable);
+                    LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
+                    LocalDateTime.parse(rangeEnd, GetFormatter.getFormatter()), pageable);
             System.out.println("параметр users = " + users);
             System.out.println("параметр states = " + states);
             System.out.println("параметр categories = " + categories);
@@ -45,16 +45,16 @@ public class AdminEventService {
             System.out.println("параметр rangeEnd = " + rangeEnd);
         } else if (categories == null || categories.get(0) == 0) {
             events = eventRepository.getFilteredEventsWithoutCategories(users, getStates(states),
-                    LocalDateTime.parse(rangeStart, formatter),
-                    LocalDateTime.parse(rangeEnd, formatter), pageable);
+                    LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
+                    LocalDateTime.parse(rangeEnd, GetFormatter.getFormatter()), pageable);
         } else if (users == null || users.get(0) == 0) {
             events = eventRepository.getFilteredEventsWithoutUsers(getStates(states), categories,
-                    LocalDateTime.parse(rangeStart, formatter),
-                    LocalDateTime.parse(rangeEnd, formatter), pageable);
+                    LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
+                    LocalDateTime.parse(rangeEnd, GetFormatter.getFormatter()), pageable);
         } else {
             events = eventRepository.getFilteredEvents(users, getStates(states), categories,
-                    LocalDateTime.parse(rangeStart, formatter),
-                    LocalDateTime.parse(rangeEnd, formatter), pageable);
+                    LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
+                    LocalDateTime.parse(rangeEnd, GetFormatter.getFormatter()), pageable);
         }
         return events.getContent()
                 .stream()
@@ -81,7 +81,7 @@ public class AdminEventService {
         }
         if (updatedEvent.getEventDate() != null) {
             validEventDate(updatedEvent.getEventDate(), now);
-            eventById.setEventDate(LocalDateTime.parse(updatedEvent.getEventDate(), formatter));
+            eventById.setEventDate(LocalDateTime.parse(updatedEvent.getEventDate(), GetFormatter.getFormatter()));
         }
         if (updatedEvent.getPaid() != null) {
             eventById.setPaid(updatedEvent.getPaid());

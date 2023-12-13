@@ -33,14 +33,12 @@ public class AdminUserService {
 
     public List<UserDto> get(int from, int size, List<Integer> ids) {
         Pageable pageable = PageRequest.of(from, size);
+        Page<User> page;
         if (ids == null || ids.isEmpty()) {
-            return userRepository.findAll(pageable)
-                    .getContent()
-                    .stream()
-                    .map(UserMapper::toUserDto)
-                    .collect(Collectors.toList());
+            page = userRepository.findAll(pageable);
+        } else {
+            page = userRepository.findUsersById(pageable, ids);
         }
-        Page<User> page = userRepository.findUsersById(pageable, ids);
         return page.getContent()
                 .stream()
                 .map(UserMapper::toUserDto)

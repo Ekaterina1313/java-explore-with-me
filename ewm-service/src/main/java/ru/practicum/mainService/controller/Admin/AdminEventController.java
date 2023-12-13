@@ -4,12 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.mainService.GetFormatter;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
 import ru.practicum.mainService.service.Admin.AdminEventService;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/admin/events")
 public class AdminEventController {
     private final AdminEventService eventService;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public AdminEventController(AdminEventService eventService) {
         this.eventService = eventService;
@@ -35,11 +34,11 @@ public class AdminEventController {
             @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("ADMIN-controller: Поступил запрос на просмотр событий.");
         if (rangeStart == null) {
-            rangeStart = LocalDateTime.now().format(formatter);
+            rangeStart = LocalDateTime.now().format(GetFormatter.getFormatter());
         }
         if (rangeEnd == null) {
             rangeEnd = LocalDateTime.of(9999, 1, 1, 0, 0, 0)
-                    .format(formatter);
+                    .format(GetFormatter.getFormatter());
         }
         if (states == null) {
             states = List.of("PUBLISHED", "PENDING", "CANCELED");
@@ -55,7 +54,7 @@ public class AdminEventController {
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto update(@PathVariable Integer eventId, @RequestBody UpdatedEventDto updatedEvent) {
-        log.info("ADMIN-controller: Поступил запрос на обновление события с id = " + eventId);
+        log.info("ADMIN-controller: Поступил запрос на обновление события с id = {}", eventId);
         return eventService.update(eventId, updatedEvent);
     }
 }

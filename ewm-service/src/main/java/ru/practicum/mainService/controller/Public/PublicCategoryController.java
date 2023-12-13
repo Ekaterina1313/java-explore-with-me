@@ -32,7 +32,7 @@ public class PublicCategoryController {
 
     @GetMapping("/{catId}")
     public CategoryDto getById(@PathVariable Integer catId) {
-        log.info("PUBLIC-controller: Поступил запрос на просмотр категории с id = ." + catId);
+        log.info("PUBLIC-controller: Поступил запрос на просмотр категории с id = {}", catId);
         try {
             return categoryService.getById(catId);
         } catch (DataIntegrityViolationException ex) {

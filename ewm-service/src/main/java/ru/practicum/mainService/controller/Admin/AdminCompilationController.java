@@ -23,7 +23,7 @@ public class AdminCompilationController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto create(@RequestBody NewCompilationDto newCompilationDto) {
-        log.info("ADMIN-controller: Поступил запрос на добавление новой подборки: " + newCompilationDto.getTitle());
+        log.info("ADMIN-controller: Поступил запрос на добавление новой подборки: {}", newCompilationDto.getTitle());
         validTitle(newCompilationDto);
         if (newCompilationDto.getPinned() == null) {
             newCompilationDto.setPinned(false);
@@ -39,7 +39,7 @@ public class AdminCompilationController {
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Integer compId) {
-        log.info("ADMIN-controller: Поступил запрос на удаление подборки событий с id = " + compId);
+        log.info("ADMIN-controller: Поступил запрос на удаление подборки событий с id = {}", compId);
         compilationService.deleteById(compId);
     }
 

@@ -33,7 +33,8 @@ public class PublicCompilationService {
     public List<CompilationDto> getAll(Boolean pinned, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
         List<Compilation> compilations = compilationRepository.findAllByPinned(pinned, pageable).getContent();
-        List<Integer> compilationIds = compilations.stream()
+        List<Integer> compilationIds = compilations
+                .stream()
                 .map(Compilation::getId)
                 .collect(Collectors.toList());
         List<EventCompilation> eventCompilations = eventCompilationRepository.findAllByCompilationIds(compilationIds);
@@ -46,7 +47,8 @@ public class PublicCompilationService {
                     events.add(eventCompilation.getEvent());
                 }
             }
-            List<EventShortDto> eventShortDtos = events.stream()
+            List<EventShortDto> eventShortDtos = events
+                    .stream()
                     .map(EventMapper::toEventShortDto)
                     .collect(Collectors.toList());
             compilationDtos.add(CompilationMapper.compilationDto(element, eventShortDtos));
@@ -58,10 +60,12 @@ public class PublicCompilationService {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new EntityNotFoundException("Compilation with id=" + compId + " was not found"));
         List<EventCompilation> eventCompilations = eventCompilationRepository.findAllByCompilationIds(List.of(compId));
-        List<Event> events = eventCompilations.stream()
+        List<Event> events = eventCompilations
+                .stream()
                 .map(EventCompilation::getEvent)
                 .collect(Collectors.toList());
-        List<EventShortDto> eventShortDtos = events.stream()
+        List<EventShortDto> eventShortDtos = events
+                .stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
         return CompilationMapper.compilationDto(compilation, eventShortDtos);

@@ -65,7 +65,8 @@ public class PrivateRequestService {
                 .orElseThrow(() -> new EntityNotFoundException("User with id=" + userId + " was not found"));
         List<ParticipationRequest> userRequests = requestRepository.findAllByRequesterId(userId);
 
-        return userRequests.stream()
+        return userRequests
+                .stream()
                 .map(ParticipationRequestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList());
     }

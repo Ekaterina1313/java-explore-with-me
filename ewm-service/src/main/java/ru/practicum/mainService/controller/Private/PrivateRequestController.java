@@ -22,7 +22,7 @@ public class PrivateRequestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto created(@PathVariable Integer userId, @RequestParam Integer eventId) {
-        log.info("PRIVATE-controller: Поступил запрос на добавление request от пользователя с id = " + userId);
+        log.info("PRIVATE-controller: Поступил запрос на добавление request от пользователя с id = {}", userId);
         try {
             return requestService.create(userId, eventId);
         } catch (DataIntegrityViolationException ex) {
@@ -34,11 +34,11 @@ public class PrivateRequestController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getAll(@PathVariable Integer userId) {
-        log.info("PRIVATE-controller: Поступил запрос на просмотр request от пользователя с id = " + userId);
+        log.info("PRIVATE-controller: Поступил запрос на просмотр request от пользователя с id = {}", userId);
         try {
             return requestService.getAll(userId);
         } catch (DataIntegrityViolationException ex) {
-            log.error("PRIVATE-controller: Error creating participationRequests", ex);
+            log.error("PRIVATE-controller: Error updating participationRequests", ex);
             throw ex;
         }
     }
@@ -46,11 +46,12 @@ public class PrivateRequestController {
     @PatchMapping("/{requestId}/cancel")
     @ResponseStatus(HttpStatus.OK)
     public ParticipationRequestDto cancelRequest(@PathVariable Integer userId, @PathVariable Integer requestId) {
-        log.info("PRIVATE-controller: Поступил запрос на удаление запроса на участие в событии от пользователя с id = " + userId);
+        log.info("PRIVATE-controller: Поступил запрос на удаление запроса на участие в событии от пользователя " +
+                "с id = {}", userId);
         try {
             return requestService.cancelRequest(userId, requestId);
         } catch (DataIntegrityViolationException ex) {
-            log.error("PRIVATE-controller: Error creating participationRequests", ex);
+            log.error("PRIVATE-controller: Error canceling participationRequests", ex);
             throw ex;
         }
     }

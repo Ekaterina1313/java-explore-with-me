@@ -3,7 +3,6 @@ package ru.practicum.mainService.controller.Admin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainService.dto.UserDto;
 import ru.practicum.mainService.error.InvalidRequestException;
@@ -24,11 +23,13 @@ public class AdminUserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@RequestBody UserDto userDto) {
-        log.info("ADMIN-controller: Поступил запрос на добавление нового пользователя с email = " + userDto.getEmail());
+        log.info("ADMIN-controller: Поступил запрос на добавление нового пользователя с email = {}",
+                userDto.getEmail());
         validEmail(userDto);
         if (userDto.getName() == null || userDto.getName().isBlank() ||
                 userDto.getName().length() < 2 || userDto.getName().length() > 250) {
-            throw new InvalidRequestException("Field: name. Error: must not be null or blank. Value: null");
+            throw new InvalidRequestException("Field: name. Error: must not be null or blank " +
+                    "or length > 250 or length < 2. Value = " + userDto.getName());
         }
         try {
             return userService.create(userDto);
@@ -43,16 +44,15 @@ public class AdminUserController {
     public List<UserDto> get(@RequestParam(name = "from", defaultValue = "0") int from,
                              @RequestParam(name = "size", defaultValue = "10") int size,
                              @RequestParam(name = "ids", required = false) List<Integer> ids) {
-        log.info("ADMIN-controller: Поступил запрос на получение пользователей с id = " + ids);
+        log.info("ADMIN-controller: Поступил запрос на получение пользователей с id = {}", ids);
         return userService.get(from, size, ids);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<String> delete(@PathVariable Integer userId) {
+    public void delete(@PathVariable Integer userId) {
         log.info("Поступил запрос на удаление пользователя с id = {}.", userId);
         userService.delete(userId);
-        return ResponseEntity.status(204).body("Пользователь удален");
     }
 
     private void validEmail(UserDto userDto) {

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.practicum.mainService.GetFormatter;
 import ru.practicum.mainService.dto.EventDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.ParticipationRequestDto;
@@ -21,7 +22,6 @@ import ru.practicum.mainService.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +34,6 @@ public class PrivateEventService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public PrivateEventService(EventRepository eventRepository, UserRepository userRepository,
                                CategoryRepository categoryRepository, RequestRepository requestRepository) {
@@ -91,7 +90,7 @@ public class PrivateEventService {
             event.setDescription(updatedEvent.getDescription());
         }
         if (updatedEvent.getEventDate() != null) {
-            event.setEventDate(LocalDateTime.parse(updatedEvent.getEventDate(), formatter));
+            event.setEventDate(LocalDateTime.parse(updatedEvent.getEventDate(), GetFormatter.getFormatter()));
         }
         if (updatedEvent.getLocation() != null) {
             event.setLocationLat(updatedEvent.getLocation().getLat());
@@ -127,7 +126,8 @@ public class PrivateEventService {
         if (!event.getInitiator().getId().equals(userId)) {
             throw new InvalidRequestException("Пользователь не является организатором события");
         }
-        return requestRepository.findAllByEventId(eventId).stream()
+        return requestRepository.findAllByEventId(eventId)
+                .stream()
                 .map(ParticipationRequestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList());
     }
@@ -181,10 +181,12 @@ public class PrivateEventService {
             requestRepository.saveAll(rejectedRequests);
         }
         return new EventRequestStatusUpdateResult(
-                confirmedRequests.stream()
+                confirmedRequests
+                        .stream()
                         .map(ParticipationRequestMapper::toParticipationRequestDto)
                         .collect(Collectors.toList()),
-                rejectedRequests.stream()
+                rejectedRequests
+                        .stream()
                         .map(ParticipationRequestMapper::toParticipationRequestDto)
                         .collect(Collectors.toList()));
     }

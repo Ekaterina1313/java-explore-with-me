@@ -22,7 +22,8 @@ public class PublicCategoryService {
 
     public List<CategoryDto> getAll(int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
-        return categoryRepository.findAll(pageable).stream()
+        return categoryRepository.findAll(pageable)
+                .stream()
                 .map(CategoryMapper::toCategoryDto)
                 .collect(Collectors.toList());
     }

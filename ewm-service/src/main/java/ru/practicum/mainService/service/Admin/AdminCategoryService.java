@@ -1,6 +1,5 @@
 package ru.practicum.mainService.service.Admin;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.mainService.dto.CategoryDto;
 import ru.practicum.mainService.mapper.CategoryMapper;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class AdminCategoryService {
     private final CategoryRepository categoryRepository;
 

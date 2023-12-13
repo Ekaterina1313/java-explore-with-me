@@ -1,31 +1,30 @@
 package ru.practicum.mainService.mapper;
 
+import ru.practicum.mainService.GetFormatter;
 import ru.practicum.mainService.dto.EventDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.EventShortDto;
 import ru.practicum.mainService.model.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class EventMapper {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static EventFullDto toEventFullDto(Event event) {
         return new EventFullDto(
                 event.getAnnotation(),
                 CategoryMapper.toCategoryDto(event.getCategory()),
                 event.getConfirmedRequests(),
-                event.getCreatedOn().format(formatter),
+                event.getCreatedOn().format(GetFormatter.getFormatter()),
                 event.getDescription(),
-                event.getEventDate().format(formatter),
+                event.getEventDate().format(GetFormatter.getFormatter()),
                 event.getId(),
                 UserMapper.toUserShortDto(event.getInitiator()),
                 new Location(event.getLocationLat(), event.getLocationLon()),
                 event.getPaid(),
                 event.getParticipantLimit(),
                 (event.getPublishedOn() == null) ? null :
-                        event.getPublishedOn().format(formatter),
+                        event.getPublishedOn().format(GetFormatter.getFormatter()),
                 event.getRequestModeration(),
                 event.getState().name(),
                 event.getTitle(),
@@ -41,7 +40,7 @@ public class EventMapper {
                 eventDto.getAnnotation(),
                 category,
                 eventDto.getDescription(),
-                LocalDateTime.parse(eventDto.getEventDate(), formatter),
+                LocalDateTime.parse(eventDto.getEventDate(), GetFormatter.getFormatter()),
                 eventDto.getLocation().getLat(),
                 eventDto.getLocation().getLon(),
                 initiator,
@@ -50,7 +49,7 @@ public class EventMapper {
                 eventDto.getParticipantLimit(),
                 eventDto.getRequestModeration(),
                 (eventDto.getPublishedOn() == null) ? null :
-                        LocalDateTime.parse(eventDto.getPublishedOn(), formatter),
+                        LocalDateTime.parse(eventDto.getPublishedOn(), GetFormatter.getFormatter()),
                 States.PENDING,
                 confirmedRequests,
                 views
@@ -62,7 +61,7 @@ public class EventMapper {
                 event.getAnnotation(),
                 CategoryMapper.toCategoryDto(event.getCategory()),
                 event.getConfirmedRequests(),
-                event.getEventDate().format(formatter),
+                event.getEventDate().format(GetFormatter.getFormatter()),
                 event.getId(),
                 UserMapper.toUserShortDto(event.getInitiator()),
                 event.getPaid(),

@@ -37,7 +37,8 @@ public class AdminCompilationService {
             return CompilationMapper.compilationDto(createdCompilation, new ArrayList<>());
         }
         List<Event> events = eventRepository.findAllById(newCompilationDto.getEvents());
-        List<EventShortDto> eventShortDtos = events.stream()
+        List<EventShortDto> eventShortDtos = events
+                .stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
         List<EventCompilation> eventCompilations = new ArrayList<>();
@@ -67,10 +68,12 @@ public class AdminCompilationService {
         compilationRepository.save(compilation);
         List<EventCompilation> eventCompilations = eventCompilationRepository.findAllById(List.of(compId));
         if (newCompilationDto.getEvents() == null) {
-            List<Event> eventsToReturn = eventCompilations.stream()
+            List<Event> eventsToReturn = eventCompilations
+                    .stream()
                     .map(EventCompilation::getEvent)
                     .collect(Collectors.toList());
-            return CompilationMapper.compilationDto(compilation, eventsToReturn.stream()
+            return CompilationMapper.compilationDto(compilation, eventsToReturn
+                    .stream()
                     .map(EventMapper::toEventShortDto)
                     .collect(Collectors.toList()));
         }
@@ -108,7 +111,8 @@ public class AdminCompilationService {
             eventCompilationRepository.saveAll(newEventCompilations);
         }
 
-        List<Event> eventsFromDb = eventCompilations.stream()
+        List<Event> eventsFromDb = eventCompilations
+                .stream()
                 .map(EventCompilation::getEvent)
                 .collect(Collectors.toList());
         for (Event event : eventsFromDb) {
@@ -116,9 +120,9 @@ public class AdminCompilationService {
                 newEvents.add(event);
             }
         }
-        return CompilationMapper.compilationDto(compilation,
-                newEvents.stream()
-                        .map(EventMapper::toEventShortDto)
-                        .collect(Collectors.toList()));
+        return CompilationMapper.compilationDto(compilation, newEvents
+                .stream()
+                .map(EventMapper::toEventShortDto)
+                .collect(Collectors.toList()));
     }
 }

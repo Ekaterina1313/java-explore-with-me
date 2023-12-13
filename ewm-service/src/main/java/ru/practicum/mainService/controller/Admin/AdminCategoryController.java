@@ -21,12 +21,12 @@ public class AdminCategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto create(@RequestBody CategoryDto categoryDto) {
-        log.info("ADMIN-controller: Поступил запрос на добавление новой категории события = " + categoryDto.getName());
-        validName(categoryDto);
+        log.info("ADMIN-controller: Поступил запрос на добавление новой категории события = {}", categoryDto.getName());
+        validCategoryName(categoryDto);
         try {
             return categoryService.create(categoryDto);
         } catch (DataIntegrityViolationException ex) {
-            log.error("Error creating user", ex);
+            log.error("Error creating category", ex);
             throw ex;
         }
     }
@@ -41,8 +41,8 @@ public class AdminCategoryController {
     @PatchMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto update(@PathVariable Integer catId, @RequestBody CategoryDto categoryDto) {
-        log.info("ADMIN-controller: Поступил запрос на обновление категории события = " + catId);
-        validName(categoryDto);
+        log.info("ADMIN-controller: Поступил запрос на обновление категории события = {}", catId);
+        validCategoryName(categoryDto);
         try {
             return categoryService.update(catId, categoryDto);
         } catch (DataIntegrityViolationException ex) {
@@ -51,10 +51,11 @@ public class AdminCategoryController {
         }
     }
 
-    private void validName(CategoryDto categoryDto) {
+    private void validCategoryName(CategoryDto categoryDto) {
         if (categoryDto.getName() == null || categoryDto.getName().isBlank() ||
                 categoryDto.getName().length() > 50) {
-            throw new InvalidRequestException("Field: name. Error: must not be blank. Value: null");
+            throw new InvalidRequestException("Field: name. Error: must not be blank or blank or length > 50. " +
+                    "Value: " + categoryDto.getName());
         }
     }
 }

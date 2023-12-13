@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.mainService.GetFormatter;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.error.InvalidRequestException;
@@ -11,7 +12,6 @@ import ru.practicum.mainService.service.Public.PublicEventService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping("/events")
 public class PublicEventController {
     private final PublicEventService eventService;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public PublicEventController(PublicEventService eventService) {
         this.eventService = eventService;
@@ -45,16 +44,17 @@ public class PublicEventController {
         log.info("endpoint path: {}", endpointPath);
         log.info("Параметр size = " + size);
         if (rangeStart != null && rangeEnd != null) {
-            if (LocalDateTime.parse(rangeStart, formatter).isAfter(LocalDateTime.parse(rangeEnd, formatter))) {
+            if (LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()).isAfter(LocalDateTime.parse(rangeEnd,
+                    GetFormatter.getFormatter()))) {
                 throw new InvalidRequestException("Время начала события не должно позже времени его окончания.");
             }
         }
         if (rangeStart == null) {
-            rangeStart = LocalDateTime.now().format(formatter);
+            rangeStart = LocalDateTime.now().format(GetFormatter.getFormatter());
         }
         if (rangeEnd == null) {
             rangeEnd = LocalDateTime.of(9999, 1, 1, 0, 0, 0)
-                    .format(formatter);
+                    .format(GetFormatter.getFormatter());
         }
         sort = sort.toLowerCase();
         if (sort.equals("views")) {
@@ -78,11 +78,9 @@ public class PublicEventController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getById(@PathVariable Integer id, HttpServletRequest request) {
-        log.info("PUBLIC-controller: Поступил запрос на просмотр события с id = ." + id);
+        log.info("PUBLIC-controller: Поступил запрос на просмотр события с id = {}", id);
         String clientIp = request.getRemoteAddr();
-        log.info("client ip: {}", clientIp);
         String endpointPath = request.getRequestURI();
-        log.info("endpoint path: {}", endpointPath);
         try {
             return eventService.getById(id, clientIp, endpointPath);
         } catch (DataIntegrityViolationException ex) {

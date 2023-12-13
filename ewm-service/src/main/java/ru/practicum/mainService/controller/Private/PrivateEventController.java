@@ -31,7 +31,7 @@ public class PrivateEventController {
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto create(@RequestBody EventDto eventDto, @PathVariable Integer userId) {
         LocalDateTime now = LocalDateTime.now();
-        log.info("PRIVATE-controller: Поступил запрос на добавление нового события = " + eventDto.getId());
+        log.info("PRIVATE-controller: Поступил запрос на добавление нового события = {}", eventDto.getId());
         if (eventDto.getPaid() == null) {
             eventDto.setPaid(false);
         }
@@ -55,7 +55,7 @@ public class PrivateEventController {
     public List<EventFullDto> getEvents(@PathVariable Integer userId,
                                         @RequestParam(name = "from", defaultValue = "0") int from,
                                         @RequestParam(name = "size", defaultValue = "10") int size) {
-        log.info("PRIVATE-controller: Поступил запрос на просмотр событий от пользователя с id = " + userId);
+        log.info("PRIVATE-controller: Поступил запрос на просмотр событий от пользователя с id = {}", userId);
         try {
             return eventService.getEvents(userId, from, size);
         } catch (DataIntegrityViolationException ex) {
@@ -67,7 +67,7 @@ public class PrivateEventController {
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getById(@PathVariable Integer userId, @PathVariable Integer eventId) {
-        log.info("PRIVATE-controller: Поступил запрос на просмотр события с id = " + eventId
+        log.info("PRIVATE-controller: Поступил запрос на просмотр события с id = {}", eventId
                 + " пользователем  с id = " + userId);
         try {
             return eventService.getById(userId, eventId);
@@ -82,7 +82,7 @@ public class PrivateEventController {
     public EventFullDto update(@PathVariable Integer userId, @PathVariable Integer eventId,
                                @RequestBody UpdatedEventDto updatedEvent) {
         LocalDateTime now = LocalDateTime.now();
-        log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = " + userId +
+        log.info("PRIVATE-controller: Поступил запрос на обновление информации о событии с id = {}", userId +
                 " пользователем с id = " + updatedEvent.getId());
         if (updatedEvent.getDescription() != null) {
             validDescription(updatedEvent.getDescription());
@@ -105,8 +105,8 @@ public class PrivateEventController {
     @GetMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getRequests(@PathVariable Integer userId, @PathVariable Integer eventId) {
-        log.info("PRIVATE-controller: Поступил запрос на просмотр события с id = " + eventId
-                + " пользователем  с id = " + userId);
+        log.info("PRIVATE-controller: Поступил запрос на просмотр события с id = {} пользователем  с id = {}",
+                eventId, userId);
         try {
             return eventService.getRequests(userId, eventId);
         } catch (DataIntegrityViolationException ex) {
@@ -125,7 +125,7 @@ public class PrivateEventController {
 
     private void validParticipantLimit(Integer limit) {
         if (limit < 0) {
-            throw new InvalidRequestException("Field: ParticipantLimit. Error: must not be 0 or less. Value: " + limit);
+            throw new InvalidRequestException("Field: ParticipantLimit. Error: must not be less than 0. Value: " + limit);
         }
     }
 
