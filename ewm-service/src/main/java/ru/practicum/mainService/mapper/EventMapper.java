@@ -1,16 +1,18 @@
 package ru.practicum.mainService.mapper;
 
 import ru.practicum.mainService.GetFormatter;
+import ru.practicum.mainService.dto.CommentShortDto;
 import ru.practicum.mainService.dto.EventDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.EventShortDto;
 import ru.practicum.mainService.model.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EventMapper {
 
-    public static EventFullDto toEventFullDto(Event event) {
+    public static EventFullDto toEventFullDto(Event event, List<CommentShortDto> comments) {
         return new EventFullDto(
                 event.getAnnotation(),
                 CategoryMapper.toCategoryDto(event.getCategory()),
@@ -28,7 +30,9 @@ public class EventMapper {
                 event.getRequestModeration(),
                 event.getState().name(),
                 event.getTitle(),
-                event.getViews()
+                event.getViews(),
+                comments
+
         );
     }
 

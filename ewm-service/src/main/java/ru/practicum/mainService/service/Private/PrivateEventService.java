@@ -6,10 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.mainService.GetFormatter;
-import ru.practicum.mainService.dto.EventDto;
-import ru.practicum.mainService.dto.EventFullDto;
-import ru.practicum.mainService.dto.ParticipationRequestDto;
-import ru.practicum.mainService.dto.UpdatedEventDto;
+import ru.practicum.mainService.dto.*;
 import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.error.InvalidRequestException;
 import ru.practicum.mainService.mapper.EventMapper;
@@ -46,31 +43,38 @@ public class PrivateEventService {
     public EventFullDto create(EventDto eventDto, Integer userId) {
         User userById = getUserById(userId);
         Category categoryById = getCategoryById(eventDto.getCategory());
+        List<CommentShortDto> comments = new ArrayList<>();
         Event createdEvent = eventRepository.save(EventMapper.fromEventDto(eventDto, categoryById,
                 userById, 0, LocalDateTime.now(), 0));
-        return EventMapper.toEventFullDto(createdEvent);
+        return EventMapper.toEventFullDto(createdEvent, comments);
     }
 
     public List<EventFullDto> getEvents(Integer userId, int from, int size) {
         getUserById(userId);
+        List<CommentShortDto> comments = new ArrayList<>();
         Pageable pageable = PageRequest.of(from, size);
         Page<Event> eventsByUser = eventRepository.findEventsByInitiatorId(userId, pageable);
 
-        return eventsByUser.getContent().stream().map(EventMapper::toEventFullDto).collect(Collectors.toList());
+        return eventsByUser.getContent()
+                .stream()
+                .map(event -> EventMapper.toEventFullDto(event, comments))
+                .collect(Collectors.toList());
     }
 
     public EventFullDto getById(Integer userId, Integer eventId) {
         getUserById(userId);
         Event eventById = getEventById(eventId);
+        List<CommentShortDto> comments = new ArrayList<>();
         if (!Objects.equals(eventById.getInitiator().getId(), userId)) {
             throw new InvalidRequestException("Пользователь не является организатором мероприятия.");
         }
-        return EventMapper.toEventFullDto(eventById);
+        return EventMapper.toEventFullDto(eventById, comments);
     }
 
     public EventFullDto update(Integer userId, Integer eventId, UpdatedEventDto updatedEvent) {
         getUserById(userId);
         Event event = getEventById(eventId);
+        List<CommentShortDto> comments = new ArrayList<>();
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new InvalidRequestException("Пользователь не является организатором мероприятия.");
         }
@@ -117,7 +121,7 @@ public class PrivateEventService {
         if (updatedEvent.getTitle() != null && !updatedEvent.getTitle().isBlank()) {
             event.setTitle(updatedEvent.getTitle());
         }
-        return EventMapper.toEventFullDto(eventRepository.save(event));
+        return EventMapper.toEventFullDto(eventRepository.save(event), comments);
     }
 
     public List<ParticipationRequestDto> getRequests(Integer userId, Integer eventId) {

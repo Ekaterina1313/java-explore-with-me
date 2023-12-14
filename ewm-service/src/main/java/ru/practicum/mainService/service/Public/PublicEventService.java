@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.mainService.GetFormatter;
+import ru.practicum.mainService.dto.CommentShortDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.mapper.EndpointHitMapper;
 import ru.practicum.mainService.mapper.EventMapper;
@@ -45,6 +46,7 @@ public class PublicEventService {
         Pageable pageable = PageRequest.of(from, size, Sort.by(Sort.Direction.DESC, sort));
         Page<Event> events;
         List<Boolean> listOfPaid = new ArrayList<>();
+        List<CommentShortDto> comments = new ArrayList<>();
         if (paid == null) {
             listOfPaid.add(true);
             listOfPaid.add(false);
@@ -116,13 +118,14 @@ public class PublicEventService {
 
         return events.getContent()
                 .stream()
-                .map(EventMapper::toEventFullDto)
+                .map(event -> EventMapper.toEventFullDto(event, comments))
                 .collect(Collectors.toList());
     }
 
     public EventFullDto getById(Integer eventId, String clientIp, String endpointPath) {
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
+        List<CommentShortDto> comments = new ArrayList<>();
         if (!eventById.getState().equals(States.PUBLISHED)) {
             throw new EntityNotFoundException("Event with id=" + eventId + " is not published");
         }
@@ -137,6 +140,6 @@ public class PublicEventService {
 
         EndpointHit endpointHitDto = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);
         restTemplate.postForObject(endpointUrl, endpointHitDto, String.class);
-        return EventMapper.toEventFullDto(eventById);
+        return EventMapper.toEventFullDto(eventById, comments);
     }
 }

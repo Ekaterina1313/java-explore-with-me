@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.mainService.GetFormatter;
+import ru.practicum.mainService.dto.CommentShortDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
 import ru.practicum.mainService.error.IncorrectParamException;
@@ -34,6 +35,7 @@ public class AdminEventService {
                                         String rangeStart, String rangeEnd, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
         Page<Event> events;
+        List<CommentShortDto> comments = new ArrayList<>();
         if ((users == null || users.get(0) == 0) && (categories == null || categories.get(0) == 0)) {
             events = eventRepository.getFilteredEventsWithoutUsersAndCategories(getStates(states),
                     LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
@@ -58,7 +60,7 @@ public class AdminEventService {
         }
         return events.getContent()
                 .stream()
-                .map(EventMapper::toEventFullDto)
+                .map(event -> EventMapper.toEventFullDto(event, comments))
                 .collect(Collectors.toList());
     }
 
@@ -66,6 +68,7 @@ public class AdminEventService {
         LocalDateTime now = LocalDateTime.now();
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
+        List<CommentShortDto> comments = new ArrayList<>();
 
         if (updatedEvent.getAnnotation() != null) {
             validAnnotation(updatedEvent.getAnnotation());
@@ -96,7 +99,7 @@ public class AdminEventService {
                     eventById.setState(States.PUBLISHED);
                     eventById.setPublishedOn(LocalDateTime.now());
                     Event updateEvent = eventRepository.save(eventById);
-                    return EventMapper.toEventFullDto(updateEvent);
+                    return EventMapper.toEventFullDto(updateEvent, comments);
                 } else {
                     throw new IncorrectParamException("Cannot publish the event because it's not in the right state: " +
                             eventById.getState().name());
@@ -108,13 +111,13 @@ public class AdminEventService {
                 } else {
                     eventById.setState(States.CANCELED);
                     Event updateEvent = eventRepository.save(eventById);
-                    return EventMapper.toEventFullDto(updateEvent);
+                    return EventMapper.toEventFullDto(updateEvent, comments);
                 }
             } else {
                 throw new InvalidRequestException("Неверно указано поле 'stateAction'.");
             }
         } else {
-            return EventMapper.toEventFullDto(eventById);
+            return EventMapper.toEventFullDto(eventById, comments);
         }
     }
 
