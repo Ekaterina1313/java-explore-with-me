@@ -185,7 +185,7 @@
 	</profiles>
 
 	<modules>
-		<module>stats/stats-server</module>
-		<module>stats/ewm-service</module>
+		<module>stats-service</module>
+		<module>ewm-service</module>
 	</modules>
 </project>
