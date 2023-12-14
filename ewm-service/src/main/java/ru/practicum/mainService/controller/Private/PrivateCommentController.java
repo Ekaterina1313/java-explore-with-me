@@ -29,4 +29,6 @@ public class PrivateCommentController {
         return commentService.create(commentDto, userId, eventId, now);
     }
 
+
+
 }

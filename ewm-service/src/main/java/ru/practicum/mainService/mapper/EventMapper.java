@@ -8,7 +8,9 @@ import ru.practicum.mainService.dto.EventShortDto;
 import ru.practicum.mainService.model.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventMapper {
 
@@ -72,5 +74,22 @@ public class EventMapper {
                 event.getTitle(),
                 event.getViews()
         );
+    }
+
+    public static List<EventFullDto> createEventFullDtoList(List<Event> events, List<Comment> comments) {
+        List<EventFullDto> eventFullDtos = new ArrayList<>();
+        for (Event event : events) {
+            List<Comment> commentsForEvent = new ArrayList<>();
+            for (Comment element : comments) {
+                if (element.getEvent().getId().equals(event.getId())) {
+                    commentsForEvent.add(element);
+                }
+            }
+            eventFullDtos.add(EventMapper.toEventFullDto(event, commentsForEvent
+                    .stream()
+                    .map(CommentMapper::toCommentShortDto)
+                    .collect(Collectors.toList())));
+        }
+        return eventFullDtos;
     }
 }

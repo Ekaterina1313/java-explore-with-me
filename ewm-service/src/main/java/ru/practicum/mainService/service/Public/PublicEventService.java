@@ -13,11 +13,14 @@ import org.springframework.web.client.RestTemplate;
 import ru.practicum.mainService.GetFormatter;
 import ru.practicum.mainService.dto.CommentShortDto;
 import ru.practicum.mainService.dto.EventFullDto;
+import ru.practicum.mainService.mapper.CommentMapper;
 import ru.practicum.mainService.mapper.EndpointHitMapper;
 import ru.practicum.mainService.mapper.EventMapper;
+import ru.practicum.mainService.model.Comment;
 import ru.practicum.mainService.model.EndpointHit;
 import ru.practicum.mainService.model.Event;
 import ru.practicum.mainService.model.States;
+import ru.practicum.mainService.repository.CommentRepository;
 import ru.practicum.mainService.repository.EventRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -31,12 +34,16 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PublicEventService {
     private final EventRepository eventRepository;
+    private final CommentRepository commentRepository;
     private final RestTemplate restTemplate;
     private static final String app = "mainService/public";
-    private static final String endpointUrl = "http://stats-server:9090/hit";
+    //private static final String endpointUrl = "http://stats-server:9090/hit";
+    private static final String endpointUrl = "http://localhost:9090/hit";
 
-    public PublicEventService(EventRepository eventRepository, RestTemplate restTemplate) {
+    public PublicEventService(EventRepository eventRepository, CommentRepository commentRepository,
+                              RestTemplate restTemplate) {
         this.eventRepository = eventRepository;
+        this.commentRepository = commentRepository;
         this.restTemplate = restTemplate;
     }
 
@@ -46,7 +53,6 @@ public class PublicEventService {
         Pageable pageable = PageRequest.of(from, size, Sort.by(Sort.Direction.DESC, sort));
         Page<Event> events;
         List<Boolean> listOfPaid = new ArrayList<>();
-        List<CommentShortDto> comments = new ArrayList<>();
         if (paid == null) {
             listOfPaid.add(true);
             listOfPaid.add(false);
@@ -116,20 +122,28 @@ public class PublicEventService {
         EndpointHit endpointHit = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);
         restTemplate.postForObject(endpointUrl, endpointHit, String.class);
 
-        return events.getContent()
+        List<Event> eventList = events.getContent();
+        List<Integer> eventIds = eventList
                 .stream()
-                .map(event -> EventMapper.toEventFullDto(event, comments))
+                .map(Event::getId)
                 .collect(Collectors.toList());
+
+        List<Comment> comments = commentRepository.findAllByEventIds(eventIds);
+        return EventMapper.createEventFullDtoList(eventList, comments);
     }
 
     public EventFullDto getById(Integer eventId, String clientIp, String endpointPath) {
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
-        List<CommentShortDto> comments = new ArrayList<>();
+        List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
+                .stream()
+                .map(CommentMapper::toCommentShortDto)
+                .collect(Collectors.toList());
         if (!eventById.getState().equals(States.PUBLISHED)) {
             throw new EntityNotFoundException("Event with id=" + eventId + " is not published");
         }
-        String path = "http://stats-server:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
+        //String path = "http://stats-server:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
+        String path = "http://localhost:9090/endpointHits?uri=" + endpointPath + "&clientIp=" + clientIp;
         ParameterizedTypeReference<List<EndpointHit>> responseType = new ParameterizedTypeReference<>() {
         };
         ResponseEntity<List<EndpointHit>> response = restTemplate.exchange(path, HttpMethod.GET,

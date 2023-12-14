@@ -10,10 +10,13 @@ import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
 import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.error.InvalidRequestException;
+import ru.practicum.mainService.mapper.CommentMapper;
 import ru.practicum.mainService.mapper.EventMapper;
+import ru.practicum.mainService.model.Comment;
 import ru.practicum.mainService.model.Event;
 import ru.practicum.mainService.model.StateAction;
 import ru.practicum.mainService.model.States;
+import ru.practicum.mainService.repository.CommentRepository;
 import ru.practicum.mainService.repository.EventRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -26,16 +29,17 @@ import java.util.stream.Collectors;
 @Service
 public class AdminEventService {
     private final EventRepository eventRepository;
+    private final CommentRepository commentRepository;
 
-    public AdminEventService(EventRepository eventRepository) {
+    public AdminEventService(EventRepository eventRepository, CommentRepository commentRepository) {
         this.eventRepository = eventRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories,
                                         String rangeStart, String rangeEnd, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
         Page<Event> events;
-        List<CommentShortDto> comments = new ArrayList<>();
         if ((users == null || users.get(0) == 0) && (categories == null || categories.get(0) == 0)) {
             events = eventRepository.getFilteredEventsWithoutUsersAndCategories(getStates(states),
                     LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
@@ -58,17 +62,23 @@ public class AdminEventService {
                     LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
                     LocalDateTime.parse(rangeEnd, GetFormatter.getFormatter()), pageable);
         }
-        return events.getContent()
+
+        List<Event> eventsList = events.getContent();
+        List<Comment> comments = commentRepository.findAllByEventIds(eventsList
                 .stream()
-                .map(event -> EventMapper.toEventFullDto(event, comments))
-                .collect(Collectors.toList());
+                .map(Event::getId)
+                .collect(Collectors.toList()));
+        return EventMapper.createEventFullDtoList(eventsList, comments);
     }
 
     public EventFullDto update(Integer eventId, UpdatedEventDto updatedEvent) {
         LocalDateTime now = LocalDateTime.now();
         Event eventById = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
-        List<CommentShortDto> comments = new ArrayList<>();
+        List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
+                .stream()
+                .map(CommentMapper::toCommentShortDto)
+                .collect(Collectors.toList());
 
         if (updatedEvent.getAnnotation() != null) {
             validAnnotation(updatedEvent.getAnnotation());

@@ -9,13 +9,11 @@ import ru.practicum.mainService.GetFormatter;
 import ru.practicum.mainService.dto.*;
 import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.error.InvalidRequestException;
+import ru.practicum.mainService.mapper.CommentMapper;
 import ru.practicum.mainService.mapper.EventMapper;
 import ru.practicum.mainService.mapper.ParticipationRequestMapper;
 import ru.practicum.mainService.model.*;
-import ru.practicum.mainService.repository.CategoryRepository;
-import ru.practicum.mainService.repository.EventRepository;
-import ru.practicum.mainService.repository.RequestRepository;
-import ru.practicum.mainService.repository.UserRepository;
+import ru.practicum.mainService.repository.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -31,40 +29,44 @@ public class PrivateEventService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
+    private final CommentRepository commentRepository;
 
     public PrivateEventService(EventRepository eventRepository, UserRepository userRepository,
-                               CategoryRepository categoryRepository, RequestRepository requestRepository) {
+                               CategoryRepository categoryRepository, RequestRepository requestRepository, CommentRepository commentRepository) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.requestRepository = requestRepository;
+        this.commentRepository = commentRepository;
     }
 
     public EventFullDto create(EventDto eventDto, Integer userId) {
         User userById = getUserById(userId);
         Category categoryById = getCategoryById(eventDto.getCategory());
-        List<CommentShortDto> comments = new ArrayList<>();
         Event createdEvent = eventRepository.save(EventMapper.fromEventDto(eventDto, categoryById,
                 userById, 0, LocalDateTime.now(), 0));
-        return EventMapper.toEventFullDto(createdEvent, comments);
+        return EventMapper.toEventFullDto(createdEvent, new ArrayList<>());
     }
 
     public List<EventFullDto> getEvents(Integer userId, int from, int size) {
         getUserById(userId);
-        List<CommentShortDto> comments = new ArrayList<>();
         Pageable pageable = PageRequest.of(from, size);
         Page<Event> eventsByUser = eventRepository.findEventsByInitiatorId(userId, pageable);
-
-        return eventsByUser.getContent()
+        List<Event> eventsList = eventsByUser.getContent();
+        List<Comment> comments = commentRepository.findAllByEventIds(eventsList
                 .stream()
-                .map(event -> EventMapper.toEventFullDto(event, comments))
-                .collect(Collectors.toList());
+                .map(Event::getId)
+                .collect(Collectors.toList()));
+        return EventMapper.createEventFullDtoList(eventsList, comments);
     }
 
     public EventFullDto getById(Integer userId, Integer eventId) {
         getUserById(userId);
         Event eventById = getEventById(eventId);
-        List<CommentShortDto> comments = new ArrayList<>();
+        List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
+                .stream()
+                .map(CommentMapper::toCommentShortDto)
+                .collect(Collectors.toList());
         if (!Objects.equals(eventById.getInitiator().getId(), userId)) {
             throw new InvalidRequestException("Пользователь не является организатором мероприятия.");
         }
@@ -74,7 +76,7 @@ public class PrivateEventService {
     public EventFullDto update(Integer userId, Integer eventId, UpdatedEventDto updatedEvent) {
         getUserById(userId);
         Event event = getEventById(eventId);
-        List<CommentShortDto> comments = new ArrayList<>();
+
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new InvalidRequestException("Пользователь не является организатором мероприятия.");
         }
@@ -121,6 +123,11 @@ public class PrivateEventService {
         if (updatedEvent.getTitle() != null && !updatedEvent.getTitle().isBlank()) {
             event.setTitle(updatedEvent.getTitle());
         }
+
+        List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
+                .stream()
+                .map(CommentMapper::toCommentShortDto)
+                .collect(Collectors.toList());
         return EventMapper.toEventFullDto(eventRepository.save(event), comments);
     }
 
