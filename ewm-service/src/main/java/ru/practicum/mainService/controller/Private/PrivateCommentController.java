@@ -51,7 +51,7 @@ public class PrivateCommentController {
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer userId, @PathVariable Integer commentId) {
-        log.info("PRIVATE-controller: Поступил запрос на удаление комментария с id= {} пользователем с id= {}",
+        log.info("PRIVATE-controller: Поступил запрос на удаление комментария с id = {} пользователем с id= {}",
                 commentId, userId);
         commentService.delete(userId, commentId);
     }
