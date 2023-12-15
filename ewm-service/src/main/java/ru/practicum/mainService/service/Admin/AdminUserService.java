@@ -10,8 +10,8 @@ import ru.practicum.mainService.dto.UserDto;
 import ru.practicum.mainService.mapper.UserMapper;
 import ru.practicum.mainService.model.User;
 import ru.practicum.mainService.repository.UserRepository;
+import ru.practicum.mainService.service.ValidationById;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +20,12 @@ import java.util.stream.Collectors;
 public class AdminUserService {
 
     private final UserRepository userRepository;
+    private final ValidationById validationById;
 
     @Autowired
-    public AdminUserService(UserRepository userRepository) {
+    public AdminUserService(UserRepository userRepository, ValidationById validationById) {
         this.userRepository = userRepository;
+        this.validationById = validationById;
     }
 
     public UserDto create(UserDto userDto) {
@@ -46,8 +48,7 @@ public class AdminUserService {
     }
 
     public void delete(Integer userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id=" + userId + " was not found"));
+        validationById.getUserById(userId);
         userRepository.deleteById(userId);
     }
 }

@@ -12,8 +12,8 @@ import ru.practicum.mainService.model.EventCompilation;
 import ru.practicum.mainService.repository.CompilationRepository;
 import ru.practicum.mainService.repository.EventCompilationRepository;
 import ru.practicum.mainService.repository.EventRepository;
+import ru.practicum.mainService.service.ValidationById;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,12 +23,15 @@ public class AdminCompilationService {
     private final CompilationRepository compilationRepository;
     private final EventCompilationRepository eventCompilationRepository;
     private final EventRepository eventRepository;
+    private final ValidationById validationById;
 
     public AdminCompilationService(CompilationRepository compilationRepository,
-                                   EventCompilationRepository eventCompilationRepository, EventRepository eventRepository) {
+                                   EventCompilationRepository eventCompilationRepository,
+                                   EventRepository eventRepository, ValidationById validationById) {
         this.compilationRepository = compilationRepository;
         this.eventCompilationRepository = eventCompilationRepository;
         this.eventRepository = eventRepository;
+        this.validationById = validationById;
     }
 
     public CompilationDto create(NewCompilationDto newCompilationDto) {
@@ -50,15 +53,13 @@ public class AdminCompilationService {
     }
 
     public void deleteById(Integer compId) {
-        compilationRepository.findById(compId)
-                .orElseThrow(() -> new EntityNotFoundException("Compilation with id=" + compId + " was not found"));
+        validationById.getCompilationById(compId);
         eventCompilationRepository.deleteByCompilationId(compId);
         compilationRepository.deleteById(compId);
     }
 
     public CompilationDto update(Integer compId, NewCompilationDto newCompilationDto) {
-        Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new EntityNotFoundException("Compilation with id=" + compId + " was not found"));
+        Compilation compilation = validationById.getCompilationById(compId);
         if (newCompilationDto.getPinned() != null) {
             compilation.setPinned(newCompilationDto.getPinned());
         }

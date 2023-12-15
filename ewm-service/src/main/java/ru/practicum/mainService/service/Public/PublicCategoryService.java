@@ -7,17 +7,19 @@ import ru.practicum.mainService.dto.CategoryDto;
 import ru.practicum.mainService.mapper.CategoryMapper;
 import ru.practicum.mainService.model.Category;
 import ru.practicum.mainService.repository.CategoryRepository;
+import ru.practicum.mainService.service.ValidationById;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class PublicCategoryService {
     private final CategoryRepository categoryRepository;
+    private final ValidationById validationById;
 
-    public PublicCategoryService(CategoryRepository categoryRepository) {
+    public PublicCategoryService(CategoryRepository categoryRepository, ValidationById validationById) {
         this.categoryRepository = categoryRepository;
+        this.validationById = validationById;
     }
 
     public List<CategoryDto> getAll(int from, int size) {
@@ -29,8 +31,7 @@ public class PublicCategoryService {
     }
 
     public CategoryDto getById(Integer catId) {
-        Category categoryById = categoryRepository.findById(catId)
-                .orElseThrow(() -> new EntityNotFoundException("Category with id=" + catId + " was not found"));
+        Category categoryById = validationById.getCategoryById(catId);
         return CategoryMapper.toCategoryDto(categoryById);
     }
 }

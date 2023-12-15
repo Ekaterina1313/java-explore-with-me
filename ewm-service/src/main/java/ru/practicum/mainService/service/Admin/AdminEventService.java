@@ -5,17 +5,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.mainService.GetFormatter;
+import ru.practicum.mainService.dto.CommentShortDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.UpdatedEventDto;
 import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.error.InvalidRequestException;
+import ru.practicum.mainService.mapper.CommentMapper;
 import ru.practicum.mainService.mapper.EventMapper;
+import ru.practicum.mainService.model.Comment;
 import ru.practicum.mainService.model.Event;
 import ru.practicum.mainService.model.StateAction;
 import ru.practicum.mainService.model.States;
+import ru.practicum.mainService.repository.CommentRepository;
 import ru.practicum.mainService.repository.EventRepository;
+import ru.practicum.mainService.service.ValidationById;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,9 +29,14 @@ import java.util.stream.Collectors;
 @Service
 public class AdminEventService {
     private final EventRepository eventRepository;
+    private final CommentRepository commentRepository;
+    private final ValidationById validationById;
 
-    public AdminEventService(EventRepository eventRepository) {
+    public AdminEventService(EventRepository eventRepository, CommentRepository commentRepository,
+                             ValidationById validationById) {
         this.eventRepository = eventRepository;
+        this.commentRepository = commentRepository;
+        this.validationById = validationById;
     }
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories,
@@ -38,11 +47,6 @@ public class AdminEventService {
             events = eventRepository.getFilteredEventsWithoutUsersAndCategories(getStates(states),
                     LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
                     LocalDateTime.parse(rangeEnd, GetFormatter.getFormatter()), pageable);
-            System.out.println("параметр users = " + users);
-            System.out.println("параметр states = " + states);
-            System.out.println("параметр categories = " + categories);
-            System.out.println("параметр rangeStart = " + rangeStart);
-            System.out.println("параметр rangeEnd = " + rangeEnd);
         } else if (categories == null || categories.get(0) == 0) {
             events = eventRepository.getFilteredEventsWithoutCategories(users, getStates(states),
                     LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
@@ -56,16 +60,22 @@ public class AdminEventService {
                     LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
                     LocalDateTime.parse(rangeEnd, GetFormatter.getFormatter()), pageable);
         }
-        return events.getContent()
+
+        List<Event> eventsList = events.getContent();
+        List<Comment> comments = commentRepository.findAllByEventIds(eventsList
                 .stream()
-                .map(EventMapper::toEventFullDto)
-                .collect(Collectors.toList());
+                .map(Event::getId)
+                .collect(Collectors.toList()));
+        return EventMapper.createEventFullDtoList(eventsList, comments);
     }
 
     public EventFullDto update(Integer eventId, UpdatedEventDto updatedEvent) {
         LocalDateTime now = LocalDateTime.now();
-        Event eventById = eventRepository.findById(eventId)
-                .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
+        Event eventById = validationById.getEventById(eventId);
+        List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
+                .stream()
+                .map(CommentMapper::toCommentShortDto)
+                .collect(Collectors.toList());
 
         if (updatedEvent.getAnnotation() != null) {
             validAnnotation(updatedEvent.getAnnotation());
@@ -96,7 +106,7 @@ public class AdminEventService {
                     eventById.setState(States.PUBLISHED);
                     eventById.setPublishedOn(LocalDateTime.now());
                     Event updateEvent = eventRepository.save(eventById);
-                    return EventMapper.toEventFullDto(updateEvent);
+                    return EventMapper.toEventFullDto(updateEvent, comments);
                 } else {
                     throw new IncorrectParamException("Cannot publish the event because it's not in the right state: " +
                             eventById.getState().name());
@@ -108,13 +118,13 @@ public class AdminEventService {
                 } else {
                     eventById.setState(States.CANCELED);
                     Event updateEvent = eventRepository.save(eventById);
-                    return EventMapper.toEventFullDto(updateEvent);
+                    return EventMapper.toEventFullDto(updateEvent, comments);
                 }
             } else {
                 throw new InvalidRequestException("Неверно указано поле 'stateAction'.");
             }
         } else {
-            return EventMapper.toEventFullDto(eventById);
+            return EventMapper.toEventFullDto(eventById, comments);
         }
     }
 

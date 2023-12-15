@@ -11,13 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.mainService.GetFormatter;
+import ru.practicum.mainService.dto.CommentShortDto;
 import ru.practicum.mainService.dto.EventFullDto;
+import ru.practicum.mainService.mapper.CommentMapper;
 import ru.practicum.mainService.mapper.EndpointHitMapper;
 import ru.practicum.mainService.mapper.EventMapper;
+import ru.practicum.mainService.model.Comment;
 import ru.practicum.mainService.model.EndpointHit;
 import ru.practicum.mainService.model.Event;
 import ru.practicum.mainService.model.States;
+import ru.practicum.mainService.repository.CommentRepository;
 import ru.practicum.mainService.repository.EventRepository;
+import ru.practicum.mainService.service.ValidationById;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -30,13 +35,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PublicEventService {
     private final EventRepository eventRepository;
+    private final CommentRepository commentRepository;
     private final RestTemplate restTemplate;
+    private final ValidationById validationById;
     private static final String app = "mainService/public";
     private static final String endpointUrl = "http://stats-server:9090/hit";
 
-    public PublicEventService(EventRepository eventRepository, RestTemplate restTemplate) {
+    public PublicEventService(EventRepository eventRepository, CommentRepository commentRepository,
+                              RestTemplate restTemplate, ValidationById validationById) {
         this.eventRepository = eventRepository;
+        this.commentRepository = commentRepository;
         this.restTemplate = restTemplate;
+        this.validationById = validationById;
     }
 
     public List<EventFullDto> getEvents(String text, List<Integer> categories, Boolean paid, String rangeStart,
@@ -114,15 +124,22 @@ public class PublicEventService {
         EndpointHit endpointHit = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);
         restTemplate.postForObject(endpointUrl, endpointHit, String.class);
 
-        return events.getContent()
+        List<Event> eventList = events.getContent();
+        List<Integer> eventIds = eventList
                 .stream()
-                .map(EventMapper::toEventFullDto)
+                .map(Event::getId)
                 .collect(Collectors.toList());
+
+        List<Comment> comments = commentRepository.findAllByEventIds(eventIds);
+        return EventMapper.createEventFullDtoList(eventList, comments);
     }
 
     public EventFullDto getById(Integer eventId, String clientIp, String endpointPath) {
-        Event eventById = eventRepository.findById(eventId)
-                .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
+        Event eventById = validationById.getEventById(eventId);
+        List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
+                .stream()
+                .map(CommentMapper::toCommentShortDto)
+                .collect(Collectors.toList());
         if (!eventById.getState().equals(States.PUBLISHED)) {
             throw new EntityNotFoundException("Event with id=" + eventId + " is not published");
         }
@@ -137,6 +154,6 @@ public class PublicEventService {
 
         EndpointHit endpointHitDto = EndpointHitMapper.createEndpointHit(app, clientIp, endpointPath);
         restTemplate.postForObject(endpointUrl, endpointHitDto, String.class);
-        return EventMapper.toEventFullDto(eventById);
+        return EventMapper.toEventFullDto(eventById, comments);
     }
 }

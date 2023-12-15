@@ -1,0 +1,2016 @@
+{
+	"info": {
+		"_postman_id": "22fa3bb2-3618-4ebf-9958-0a6ac7940baf",
+		"name": "feature",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23761060",
+		"_collection_link": "https://interstellar-meteor-407542-1.postman.co/workspace/Team-Workspace~5367d956-63fc-4719-8b53-646c0b354341/collection/23761060-22fa3bb2-3618-4ebf-9958-0a6ac7940baf?action=share&source=collection_link&creator=23761060"
+	},
+	"item": [
+		{
+			"name": "user 1 create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"Has user create response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test user 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 136').to.eql(136);\r",
+							"});\r",
+							"pm.test(\"Test user 'email' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('email');\r",
+							"    pm.expect(jsonData.email, '\"email\" must be \"user@user.com\"').to.eql('user@user.com');\r",
+							"});\r",
+							"pm.test(\"Test user 'name' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"    pm.expect(jsonData.name, '\"name\" must be \"user\"').to.eql('user');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"user\",\r\n    \"email\": \"user@user.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user 2 create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"Has user create response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test user 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 137').to.eql(137);\r",
+							"});\r",
+							"pm.test(\"Test user 'email' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('email');\r",
+							"    pm.expect(jsonData.email, '\"email\" must be \"user2@user.com\"').to.eql('user2@user.com');\r",
+							"});\r",
+							"pm.test(\"Test user 'name' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"    pm.expect(jsonData.name, '\"name\" must be \"user2\"').to.eql('user2');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"user2\",\r\n    \"email\": \"user2@user.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user 3 create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"Has user create response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test user 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 138').to.eql(138);\r",
+							"});\r",
+							"pm.test(\"Test user 'email' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('email');\r",
+							"    pm.expect(jsonData.email, '\"email\" must be \"user3@user.com\"').to.eql('user3@user.com');\r",
+							"});\r",
+							"pm.test(\"Test user 'name' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"    pm.expect(jsonData.name, '\"name\" must be \"user3\"').to.eql('user3');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"user3\",\r\n    \"email\": \"user3@user.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "category 1 create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"category1\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/categories",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "category 2 create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"рок-концерт\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/categories",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "event 1 create success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"Has event create response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test event 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 106').to.eql(106);\r",
+							"});\r",
+							"pm.test(\"Test category 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.category.id, '\"category.id\" must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test category 'initiator.id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('initiator');\r",
+							"    pm.expect(jsonData.initiator.id, '\"id\" must be 2').to.eql(2);\r",
+							"});\r",
+							"pm.test(\"Test category 'description' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('description');\r",
+							"    pm.expect(jsonData.description, '\"description\" must be \"Поход в горы на несколько дней вдали от цивилизации - это то, что поможет вам отдохнуть от городской суеты и избавиться от стресса.\"').to.eql('Поход в горы на несколько дней вдали от цивилизации - это то, что поможет вам отдохнуть от городской суеты и избавиться от стресса.');\r",
+							"});\r",
+							"pm.test(\"Test category 'annotation' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('annotation');\r",
+							"    pm.expect(jsonData.annotation, '\"annotation\" must be \"Свежий горный воздух пойдет вам на пользу!\"').to.eql('Свежий горный воздух пойдет вам на пользу!');\r",
+							"});\r",
+							"pm.test(\"Test category 'requestModeration' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('requestModeration');\r",
+							"    pm.expect(jsonData.requestModeration, '\"requestModeration\" must be true').to.eql(true);\r",
+							"});\r",
+							"pm.test(\"Test category 'paid' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('paid');\r",
+							"    pm.expect(jsonData.paid, '\"paid\" must be true').to.eql(true);\r",
+							"});\r",
+							"pm.test(\"Test category 'participantLimit' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('participantLimit');\r",
+							"    pm.expect(jsonData.participantLimit, '\"participantLimit\" must be 4').to.eql(4);\r",
+							"});\r",
+							"pm.test(\"Test category 'location.lat' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('location');\r",
+							"    pm.expect(jsonData.location.lat, '\"location.lat\" must be 55.754167').to.eql(55.754167);\r",
+							"});\r",
+							"pm.test(\"Test category 'location.lon' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('location');\r",
+							"    pm.expect(jsonData.location.lon, '\"location.lon\" must be 37.62').to.eql(37.62);\r",
+							"});\r",
+							"pm.test(\"Test category 'title' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('title');\r",
+							"    pm.expect(jsonData.title, '\"title must be \"Поход в горы\"').to.eql('Поход в горы');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"annotation\": \"Свежий горный воздух пойдет вам на пользу!\",\r\n  \"category\": 1,\r\n  \"description\": \"Поход в горы на несколько дней вдали от цивилизации - это то, что поможет вам отдохнуть от городской суеты и избавиться от стресса.\",\r\n  \"eventDate\": \"2025-12-11 09:00:00\",\r\n  \"location\": {\r\n    \"lat\": 55.754167,\r\n    \"lon\": 37.62\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 4,\r\n  \"requestModeration\": true,\r\n  \"title\": \"Поход в горы\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/events",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "event 2 create success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"Has event create response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test event 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 107').to.eql(107);\r",
+							"});\r",
+							"pm.test(\"Test category 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.category.id, '\"category.id\" must be 2').to.eql(2);\r",
+							"});\r",
+							"pm.test(\"Test category 'initiator.id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('initiator');\r",
+							"    pm.expect(jsonData.initiator.id, '\"id\" must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test category 'description' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('description');\r",
+							"    pm.expect(jsonData.description, '\"Легендарный хеви-метал коллектив Ария устроит закрытую рок-вечеринку на палубе яхты Марина в рамках тура Гость из Царства теней\"').to.eql('Легендарный хеви-метал коллектив Ария устроит закрытую рок-вечеринку на палубе яхты Марина в рамках тура Гость из Царства теней');\r",
+							"});\r",
+							"pm.test(\"Test category 'annotation' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('annotation');\r",
+							"    pm.expect(jsonData.annotation, '\"annotation\" must be \"Рок-концерт группы Ария на корабле\"').to.eql('Рок-концерт группы Ария на корабле');\r",
+							"});\r",
+							"pm.test(\"Test category 'requestModeration' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('requestModeration');\r",
+							"    pm.expect(jsonData.requestModeration, '\"requestModeration\" must be true').to.eql(true);\r",
+							"});\r",
+							"pm.test(\"Test category 'paid' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('paid');\r",
+							"    pm.expect(jsonData.paid, '\"paid\" must be true').to.eql(true);\r",
+							"});\r",
+							"pm.test(\"Test category 'participantLimit' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('participantLimit');\r",
+							"    pm.expect(jsonData.participantLimit, '\"participantLimit\" must be 50').to.eql(50);\r",
+							"});\r",
+							"pm.test(\"Test category 'location.lat' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('location');\r",
+							"    pm.expect(jsonData.location.lat, '\"location.lat\" must be 55.754167').to.eql(55.754167);\r",
+							"});\r",
+							"pm.test(\"Test category 'location.lon' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('location');\r",
+							"    pm.expect(jsonData.location.lon, '\"location.lon\" must be 37.62').to.eql(37.62);\r",
+							"});\r",
+							"pm.test(\"Test category 'title' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('title');\r",
+							"    pm.expect(jsonData.title, '\"title must be \"Гость из Царства теней\"').to.eql('Гость из Царства теней');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"annotation\": \"Рок-концерт группы Ария на корабле\",\r\n  \"category\": 2,\r\n  \"description\": \"Легендарный хеви-метал коллектив Ария устроит закрытую рок-вечеринку на палубе яхты Марина в рамках тура Гость из Царства теней\",\r\n  \"eventDate\": \"2026-07-11 20:00:00\",\r\n  \"location\": {\r\n    \"lat\": 55.754167,\r\n    \"lon\": 37.62\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 50,\r\n  \"requestModeration\": true,\r\n  \"title\": \"Гость из Царства теней\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/events",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update event 2 state PUBLISHED",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"stateAction\": \"PUBLISH_EVENT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/events/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "107"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment fail not published event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, всем рекомендую!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update event 1 state PUBLISHED",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"stateAction\": \"PUBLISH_EVENT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/events/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment fail user not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, всем рекомендую!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1111"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment fail event not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, всем рекомендую!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "eventId",
+							"value": "111"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment fail owner's event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, всем рекомендую!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment fail text is null",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment fail text is blank",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"  \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment fail text length < 10",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Ужасно\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment fail text length > 5000",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую!Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую! Отдохнул на годы вперед, всем рекомендую!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, всем рекомендую!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment 2 success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отлично провел время, организация мероприятия на высшем уровне!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment 3 success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Определённо стоило потраченных денег, очень понравилось! Спасибо музыкантам!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "eventId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get event by id = 1 public",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"Has event get response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test event 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test category 'category.id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.category.id, '\"category.id\" must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test category 'initiator.id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('initiator');\r",
+							"    pm.expect(jsonData.initiator.id, '\"id\" must be 2').to.eql(2);\r",
+							"});\r",
+							"pm.test(\"Test category 'state' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('state');\r",
+							"    pm.expect(jsonData.state, '\"state\" must be \"PUBLISHED\"').to.eql(\"PUBLISHED\");\r",
+							"});\r",
+							"pm.test(\"Test list comments response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.comments.length, 'List length must be 2').to.eql(2);\r",
+							"});\r",
+							"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('comments');\r",
+							"    pm.expect(jsonData.comments[0].id, '\"id\" must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test comment[1] 'authorId' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('comments');\r",
+							"    pm.expect(jsonData.comments[1].authorId, '\"authorId\" must be 3').to.eql(3);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update comment fail user not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, рекомендую любителям природы и активного досуга!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1111"
+						},
+						{
+							"key": "commentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update comment fail comment not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, рекомендую любителям природы и активного досуга!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "commentId",
+							"value": "111111"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update comment fail comment no body",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "commentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update comment fail comment text is blank",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"  \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "commentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update comment no changes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, всем рекомендую!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "commentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update comment success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+							"});\r",
+							"pm.test(\"Has comment patch response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test comment 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test comment 'text' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('text');\r",
+							"    pm.expect(jsonData.text, '\"text\" must be \"Отдохнул на годы вперед, рекомендую любителям природы и активного досуга!\"').to.eql(\"Отдохнул на годы вперед, рекомендую любителям природы и активного досуга!\");\r",
+							"});\r",
+							"pm.test(\"Test comment 'author.id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('author');\r",
+							"    pm.expect(jsonData.author.id, '\"author.id\" must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test comment 'eventId' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('eventId');\r",
+							"    pm.expect(jsonData.eventId, '\"eventId\" must be 1').to.eql(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"text\": \"Отдохнул на годы вперед, рекомендую любителям природы и активного досуга!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "commentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comments by user 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+							"});\r",
+							"pm.test(\"Has comment get response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"description\" must be \"Отдохнул на годы вперед, рекомендую любителям природы и активного досуга!\"').to.eql(\"Отдохнул на годы вперед, рекомендую любителям природы и активного досуга!\");\r",
+							"});\r",
+							"pm.test(\"Test list comments response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\" must be 1').to.eql(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete comment fail user not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1111"
+						},
+						{
+							"key": "commentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete comment fail comment not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "commentId",
+							"value": "1111"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete comment fail not owners's comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "commentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comments by user 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+							"});\r",
+							"pm.test(\"Has comment get response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);\r",
+							"});\r",
+							"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be \"Отлично провел время, организация мероприятия на высшем уровне!\"').to.eql(\"Отлично провел время, организация мероприятия на высшем уровне!\");\r",
+							"});\r",
+							"pm.test(\"Test list comments response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+							"});\r",
+							"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\" must be 3').to.eql(3);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete comment 2 by user 3 success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([204]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments",
+						":commentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "commentId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comments by user 3 after deleting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+							"});\r",
+							"pm.test(\"Has comment get response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test(\"Test list comments response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.length, 'List length must be 0').to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"comments"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

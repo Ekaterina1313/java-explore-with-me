@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.mainService.model.Location;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -25,4 +27,5 @@ public class EventFullDto {
     private String state;
     private String title;
     private Integer views;
+    private List<CommentShortDto> comments;
 }

@@ -1,16 +1,20 @@
 package ru.practicum.mainService.mapper;
 
 import ru.practicum.mainService.GetFormatter;
+import ru.practicum.mainService.dto.CommentShortDto;
 import ru.practicum.mainService.dto.EventDto;
 import ru.practicum.mainService.dto.EventFullDto;
 import ru.practicum.mainService.dto.EventShortDto;
 import ru.practicum.mainService.model.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventMapper {
 
-    public static EventFullDto toEventFullDto(Event event) {
+    public static EventFullDto toEventFullDto(Event event, List<CommentShortDto> comments) {
         return new EventFullDto(
                 event.getAnnotation(),
                 CategoryMapper.toCategoryDto(event.getCategory()),
@@ -28,7 +32,9 @@ public class EventMapper {
                 event.getRequestModeration(),
                 event.getState().name(),
                 event.getTitle(),
-                event.getViews()
+                event.getViews(),
+                comments
+
         );
     }
 
@@ -68,5 +74,22 @@ public class EventMapper {
                 event.getTitle(),
                 event.getViews()
         );
+    }
+
+    public static List<EventFullDto> createEventFullDtoList(List<Event> events, List<Comment> comments) {
+        List<EventFullDto> eventFullDtos = new ArrayList<>();
+        for (Event event : events) {
+            List<Comment> commentsForEvent = new ArrayList<>();
+            for (Comment element : comments) {
+                if (element.getEvent().getId().equals(event.getId())) {
+                    commentsForEvent.add(element);
+                }
+            }
+            eventFullDtos.add(EventMapper.toEventFullDto(event, commentsForEvent
+                    .stream()
+                    .map(CommentMapper::toCommentShortDto)
+                    .collect(Collectors.toList())));
+        }
+        return eventFullDtos;
     }
 }

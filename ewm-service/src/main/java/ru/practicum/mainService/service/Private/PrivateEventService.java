@@ -6,21 +6,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.mainService.GetFormatter;
-import ru.practicum.mainService.dto.EventDto;
-import ru.practicum.mainService.dto.EventFullDto;
-import ru.practicum.mainService.dto.ParticipationRequestDto;
-import ru.practicum.mainService.dto.UpdatedEventDto;
+import ru.practicum.mainService.dto.*;
 import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.error.InvalidRequestException;
+import ru.practicum.mainService.mapper.CommentMapper;
 import ru.practicum.mainService.mapper.EventMapper;
 import ru.practicum.mainService.mapper.ParticipationRequestMapper;
 import ru.practicum.mainService.model.*;
-import ru.practicum.mainService.repository.CategoryRepository;
+import ru.practicum.mainService.repository.CommentRepository;
 import ru.practicum.mainService.repository.EventRepository;
 import ru.practicum.mainService.repository.RequestRepository;
-import ru.practicum.mainService.repository.UserRepository;
+import ru.practicum.mainService.service.ValidationById;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,46 +28,55 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PrivateEventService {
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
+    private final CommentRepository commentRepository;
+    private final ValidationById validationById;
 
-    public PrivateEventService(EventRepository eventRepository, UserRepository userRepository,
-                               CategoryRepository categoryRepository, RequestRepository requestRepository) {
+    public PrivateEventService(EventRepository eventRepository, RequestRepository requestRepository,
+                               CommentRepository commentRepository, ValidationById validationById) {
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
         this.requestRepository = requestRepository;
+        this.commentRepository = commentRepository;
+        this.validationById = validationById;
     }
 
     public EventFullDto create(EventDto eventDto, Integer userId) {
-        User userById = getUserById(userId);
-        Category categoryById = getCategoryById(eventDto.getCategory());
+        User userById = validationById.getUserById(userId);
+        Category categoryById = validationById.getCategoryById(eventDto.getCategory());
         Event createdEvent = eventRepository.save(EventMapper.fromEventDto(eventDto, categoryById,
                 userById, 0, LocalDateTime.now(), 0));
-        return EventMapper.toEventFullDto(createdEvent);
+        return EventMapper.toEventFullDto(createdEvent, new ArrayList<>());
     }
 
     public List<EventFullDto> getEvents(Integer userId, int from, int size) {
-        getUserById(userId);
+        validationById.getUserById(userId);
         Pageable pageable = PageRequest.of(from, size);
         Page<Event> eventsByUser = eventRepository.findEventsByInitiatorId(userId, pageable);
-
-        return eventsByUser.getContent().stream().map(EventMapper::toEventFullDto).collect(Collectors.toList());
+        List<Event> eventsList = eventsByUser.getContent();
+        List<Comment> comments = commentRepository.findAllByEventIds(eventsList
+                .stream()
+                .map(Event::getId)
+                .collect(Collectors.toList()));
+        return EventMapper.createEventFullDtoList(eventsList, comments);
     }
 
     public EventFullDto getById(Integer userId, Integer eventId) {
-        getUserById(userId);
-        Event eventById = getEventById(eventId);
+        validationById.getUserById(userId);
+        Event eventById = validationById.getEventById(eventId);
+        List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
+                .stream()
+                .map(CommentMapper::toCommentShortDto)
+                .collect(Collectors.toList());
         if (!Objects.equals(eventById.getInitiator().getId(), userId)) {
             throw new InvalidRequestException("Пользователь не является организатором мероприятия.");
         }
-        return EventMapper.toEventFullDto(eventById);
+        return EventMapper.toEventFullDto(eventById, comments);
     }
 
     public EventFullDto update(Integer userId, Integer eventId, UpdatedEventDto updatedEvent) {
-        getUserById(userId);
-        Event event = getEventById(eventId);
+        validationById.getUserById(userId);
+        Event event = validationById.getEventById(eventId);
+
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new InvalidRequestException("Пользователь не является организатором мероприятия.");
         }
@@ -81,9 +87,7 @@ public class PrivateEventService {
             event.setAnnotation(updatedEvent.getAnnotation());
         }
         if (updatedEvent.getCategory() != null) {
-            Category category = categoryRepository.findById(updatedEvent.getCategory())
-                    .orElseThrow(() -> new EntityNotFoundException("Category with id=" + updatedEvent.getCategory() +
-                            " was not found"));
+            Category category = validationById.getCategoryById(updatedEvent.getCategory());
             event.setCategory(category);
         }
         if (updatedEvent.getDescription() != null && !updatedEvent.getDescription().isBlank()) {
@@ -117,12 +121,17 @@ public class PrivateEventService {
         if (updatedEvent.getTitle() != null && !updatedEvent.getTitle().isBlank()) {
             event.setTitle(updatedEvent.getTitle());
         }
-        return EventMapper.toEventFullDto(eventRepository.save(event));
+
+        List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
+                .stream()
+                .map(CommentMapper::toCommentShortDto)
+                .collect(Collectors.toList());
+        return EventMapper.toEventFullDto(eventRepository.save(event), comments);
     }
 
     public List<ParticipationRequestDto> getRequests(Integer userId, Integer eventId) {
-        getUserById(userId);
-        Event event = getEventById(eventId);
+        validationById.getUserById(userId);
+        Event event = validationById.getEventById(eventId);
         if (!event.getInitiator().getId().equals(userId)) {
             throw new InvalidRequestException("Пользователь не является организатором события");
         }
@@ -134,8 +143,8 @@ public class PrivateEventService {
 
     public EventRequestStatusUpdateResult updateRequests(Integer userId, Integer eventId,
                                                          EventRequestStatusUpdateRequest request) {
-        getUserById(userId);
-        Event event = getEventById(eventId);
+        validationById.getUserById(userId);
+        Event event = validationById.getEventById(eventId);
         if (event.getParticipantLimit() != 0 && Objects.equals(event.getParticipantLimit(),
                 event.getConfirmedRequests())) {
             throw new IncorrectParamException("Достигнут лимит свободных мест.");
@@ -189,20 +198,5 @@ public class PrivateEventService {
                         .stream()
                         .map(ParticipationRequestMapper::toParticipationRequestDto)
                         .collect(Collectors.toList()));
-    }
-
-    private User getUserById(Integer userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id=" + userId + " was not found"));
-    }
-
-    private Category getCategoryById(Integer categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Category with id=" + categoryId + " was not found"));
-    }
-
-    private Event getEventById(Integer eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
     }
 }
