@@ -34,7 +34,7 @@ public class PrivateCommentController {
     @ResponseStatus(HttpStatus.OK)
     public CommentDto update(@RequestBody CommentDto updatedCommentDto, @PathVariable Integer userId,
                              @PathVariable Integer commentId) {
-        log.info("PRIVATE-controller: Поступил запрос на обновление комментария с id = {}", commentId);
+        log.info("PRIVATE-controller: Поступил запрос на обновление комментария с id= {}", commentId);
         if (updatedCommentDto.getText() != null) {
             validText(updatedCommentDto.getText());
         }
