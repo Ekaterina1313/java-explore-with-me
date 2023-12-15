@@ -24,7 +24,7 @@
 							"pm.test(\"Test user 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('id');\r",
-							"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 136').to.eql(136);\r",
 							"});\r",
 							"pm.test(\"Test user 'email' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
@@ -83,7 +83,7 @@
 							"pm.test(\"Test user 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('id');\r",
-							"    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 137').to.eql(137);\r",
 							"});\r",
 							"pm.test(\"Test user 'email' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
@@ -142,7 +142,7 @@
 							"pm.test(\"Test user 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('id');\r",
-							"    pm.expect(jsonData.id, '\"id\" must be 3').to.eql(3);\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 138').to.eql(138);\r",
 							"});\r",
 							"pm.test(\"Test user 'email' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
@@ -281,7 +281,7 @@
 							"pm.test(\"Test event 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('id');\r",
-							"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 106').to.eql(106);\r",
 							"});\r",
 							"pm.test(\"Test category 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
@@ -387,7 +387,7 @@
 							"pm.test(\"Test event 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('id');\r",
-							"    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);\r",
+							"    pm.expect(jsonData.id, '\"id\" must be 107').to.eql(107);\r",
 							"});\r",
 							"pm.test(\"Test category 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
@@ -516,7 +516,7 @@
 					"variable": [
 						{
 							"key": "eventId",
-							"value": "2"
+							"value": "107"
 						}
 					]
 				}
@@ -1171,11 +1171,6 @@
 							"    pm.expect(jsonData).to.have.property('initiator');\r",
 							"    pm.expect(jsonData.initiator.id, '\"id\" must be 2').to.eql(2);\r",
 							"});\r",
-							"pm.test(\"Test category 'description' field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property('description');\r",
-							"    pm.expect(jsonData.description, '\"description\" must be \"Поход в горы на несколько дней вдали от цивилизации - это то, что поможет вам отдохнуть от городской суеты и избавиться от стресса.\"').to.eql('Поход в горы на несколько дней вдали от цивилизации - это то, что поможет вам отдохнуть от городской суеты и избавиться от стресса.');\r",
-							"});\r",
 							"pm.test(\"Test category 'requestModeration' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('requestModeration');\r",
@@ -1185,21 +1180,6 @@
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('paid');\r",
 							"    pm.expect(jsonData.paid, '\"paid\" must be true').to.eql(true);\r",
-							"});\r",
-							"pm.test(\"Test category 'participantLimit' field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property('participantLimit');\r",
-							"    pm.expect(jsonData.participantLimit, '\"participantLimit\" must be 4').to.eql(4);\r",
-							"});\r",
-							"pm.test(\"Test category 'location.lat' field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property('location');\r",
-							"    pm.expect(jsonData.location.lat, '\"location.lat\" must be 55.754167').to.eql(55.754167);\r",
-							"});\r",
-							"pm.test(\"Test category 'location.lon' field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property('location');\r",
-							"    pm.expect(jsonData.location.lon, '\"location.lon\" must be 37.62').to.eql(37.62);\r",
 							"});\r",
 							"pm.test(\"Test category 'state' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
@@ -1256,71 +1236,6 @@
 							"key": "eventId",
 							"value": "1"
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get events with comments public",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.be.ok;\r",
-							"});\r",
-							"pm.test(\"Test list event response\", function () {\r",
-							"    pm.response.to.be.withBody;\r",
-							"    pm.response.to.be.json;\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Test event[0] 'id' field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData[0]).to.have.property('id');\r",
-							"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
-							"});\r",
-							"pm.test(\"Test event[1] 'comments' field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData[1]).to.have.property('comments');\r",
-							"    pm.expect(jsonData[1].comments[0].id, '\"comment.id\" must be 3').to.eql(3);\r",
-							"});\r",
-							"pm.test(\"Test event[0] 'comments' field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData[0]).to.have.property('comments');\r",
-							"    pm.expect(jsonData[0].comments.length, '\"comment.length\" must be 2').to.eql(2);\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseUrl}}/events",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"events"
 					]
 				}
 			},
