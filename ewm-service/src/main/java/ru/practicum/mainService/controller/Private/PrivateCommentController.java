@@ -44,7 +44,7 @@ public class PrivateCommentController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CommentDto> getAll(@PathVariable Integer userId) {
-        log.info("PRIVATE-controller: Поступил запрос на просмотр всех комментариев пользователя с id = {}", userId);
+        log.info("PRIVATE-controller: Поступил запрос на просмотр всех комментариев пользователя с id= {}", userId);
         return commentService.getAll(userId);
     }
 
