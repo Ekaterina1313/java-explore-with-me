@@ -12,8 +12,8 @@ import ru.practicum.mainService.model.Event;
 import ru.practicum.mainService.model.EventCompilation;
 import ru.practicum.mainService.repository.CompilationRepository;
 import ru.practicum.mainService.repository.EventCompilationRepository;
+import ru.practicum.mainService.service.ValidationById;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,11 +23,14 @@ import java.util.stream.Collectors;
 public class PublicCompilationService {
     private final CompilationRepository compilationRepository;
     private final EventCompilationRepository eventCompilationRepository;
+    private final ValidationById validationById;
 
     public PublicCompilationService(CompilationRepository compilationRepository,
-                                    EventCompilationRepository eventCompilationRepository) {
+                                    EventCompilationRepository eventCompilationRepository,
+                                    ValidationById validationById) {
         this.compilationRepository = compilationRepository;
         this.eventCompilationRepository = eventCompilationRepository;
+        this.validationById = validationById;
     }
 
     public List<CompilationDto> getAll(Boolean pinned, int from, int size) {
@@ -57,8 +60,7 @@ public class PublicCompilationService {
     }
 
     public CompilationDto getById(Integer compId) {
-        Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new EntityNotFoundException("Compilation with id=" + compId + " was not found"));
+        Compilation compilation = validationById.getCompilationById(compId);
         List<EventCompilation> eventCompilations = eventCompilationRepository.findAllByCompilationIds(List.of(compId));
         List<Event> events = eventCompilations
                 .stream()

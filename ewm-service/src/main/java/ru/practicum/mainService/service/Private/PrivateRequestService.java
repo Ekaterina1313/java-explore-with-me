@@ -1,7 +1,6 @@
 package ru.practicum.mainService.service.Private;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.practicum.mainService.dto.ParticipationRequestDto;
 import ru.practicum.mainService.error.IncorrectParamException;
 import ru.practicum.mainService.error.InvalidRequestException;
@@ -9,9 +8,8 @@ import ru.practicum.mainService.mapper.ParticipationRequestMapper;
 import ru.practicum.mainService.model.*;
 import ru.practicum.mainService.repository.EventRepository;
 import ru.practicum.mainService.repository.RequestRepository;
-import ru.practicum.mainService.repository.UserRepository;
+import ru.practicum.mainService.service.ValidationById;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -20,21 +18,19 @@ import java.util.stream.Collectors;
 @Service
 public class PrivateRequestService {
     private final RequestRepository requestRepository;
-    private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final ValidationById validationById;
 
-    public PrivateRequestService(RequestRepository requestRepository,
-                                 UserRepository userRepository, EventRepository eventRepository) {
+    public PrivateRequestService(RequestRepository requestRepository, EventRepository eventRepository,
+                                 ValidationById validationById) {
         this.requestRepository = requestRepository;
-        this.userRepository = userRepository;
         this.eventRepository = eventRepository;
+        this.validationById = validationById;
     }
 
     public ParticipationRequestDto create(Integer userId, Integer eventId) {
-        User userById = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id=" + userId + " was not found"));
-        Event eventById = eventRepository.findById(eventId)
-                .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
+        User userById = validationById.getUserById(userId);
+        Event eventById = validationById.getEventById(eventId);
         if (Objects.equals(eventById.getInitiator().getId(), userId)) {
             throw new IncorrectParamException("Нельзя подать заявку на участие в собственном событии.");
         }
@@ -60,11 +56,9 @@ public class PrivateRequestService {
         return ParticipationRequestMapper.toParticipationRequestDto(requestRepository.save(participationRequest));
     }
 
-    public List<ParticipationRequestDto> getAll(@PathVariable Integer userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id=" + userId + " was not found"));
+    public List<ParticipationRequestDto> getAll(Integer userId) {
+        validationById.getUserById(userId);
         List<ParticipationRequest> userRequests = requestRepository.findAllByRequesterId(userId);
-
         return userRequests
                 .stream()
                 .map(ParticipationRequestMapper::toParticipationRequestDto)
@@ -72,10 +66,8 @@ public class PrivateRequestService {
     }
 
     public ParticipationRequestDto cancelRequest(Integer userId, Integer requestId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id=" + userId + " was not found"));
-        ParticipationRequest request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new EntityNotFoundException("Request with id=" + requestId + " was not found"));
+        validationById.getUserById(userId);
+        ParticipationRequest request = validationById.getParticipationRequestById(requestId);
         Event event = request.getEvent();
         if (!Objects.equals(request.getRequester().getId(), userId)) {
             throw new InvalidRequestException("Нельзя отменить чужую заявку на участие в мероприятии.");

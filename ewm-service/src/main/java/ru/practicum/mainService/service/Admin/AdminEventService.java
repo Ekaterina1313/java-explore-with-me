@@ -18,8 +18,8 @@ import ru.practicum.mainService.model.StateAction;
 import ru.practicum.mainService.model.States;
 import ru.practicum.mainService.repository.CommentRepository;
 import ru.practicum.mainService.repository.EventRepository;
+import ru.practicum.mainService.service.ValidationById;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,10 +30,13 @@ import java.util.stream.Collectors;
 public class AdminEventService {
     private final EventRepository eventRepository;
     private final CommentRepository commentRepository;
+    private final ValidationById validationById;
 
-    public AdminEventService(EventRepository eventRepository, CommentRepository commentRepository) {
+    public AdminEventService(EventRepository eventRepository, CommentRepository commentRepository,
+                             ValidationById validationById) {
         this.eventRepository = eventRepository;
         this.commentRepository = commentRepository;
+        this.validationById = validationById;
     }
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories,
@@ -44,11 +47,6 @@ public class AdminEventService {
             events = eventRepository.getFilteredEventsWithoutUsersAndCategories(getStates(states),
                     LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
                     LocalDateTime.parse(rangeEnd, GetFormatter.getFormatter()), pageable);
-            System.out.println("параметр users = " + users);
-            System.out.println("параметр states = " + states);
-            System.out.println("параметр categories = " + categories);
-            System.out.println("параметр rangeStart = " + rangeStart);
-            System.out.println("параметр rangeEnd = " + rangeEnd);
         } else if (categories == null || categories.get(0) == 0) {
             events = eventRepository.getFilteredEventsWithoutCategories(users, getStates(states),
                     LocalDateTime.parse(rangeStart, GetFormatter.getFormatter()),
@@ -73,8 +71,7 @@ public class AdminEventService {
 
     public EventFullDto update(Integer eventId, UpdatedEventDto updatedEvent) {
         LocalDateTime now = LocalDateTime.now();
-        Event eventById = eventRepository.findById(eventId)
-                .orElseThrow(() -> new EntityNotFoundException("Event with id=" + eventId + " was not found"));
+        Event eventById = validationById.getEventById(eventId);
         List<CommentShortDto> comments = commentRepository.findAllByEventIds(List.of(eventId))
                 .stream()
                 .map(CommentMapper::toCommentShortDto)

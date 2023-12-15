@@ -5,17 +5,16 @@ import ru.practicum.mainService.dto.CategoryDto;
 import ru.practicum.mainService.mapper.CategoryMapper;
 import ru.practicum.mainService.model.Category;
 import ru.practicum.mainService.repository.CategoryRepository;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
+import ru.practicum.mainService.service.ValidationById;
 
 @Service
 public class AdminCategoryService {
     private final CategoryRepository categoryRepository;
+    private final ValidationById validationById;
 
-    public AdminCategoryService(CategoryRepository categoryRepository) {
+    public AdminCategoryService(CategoryRepository categoryRepository, ValidationById validationById) {
         this.categoryRepository = categoryRepository;
+        this.validationById = validationById;
     }
 
     public CategoryDto create(CategoryDto categoryDto) {
@@ -24,25 +23,17 @@ public class AdminCategoryService {
     }
 
     public void delete(Integer categoryId) {
-        categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Category with id=" + categoryId + " was not found"));
+        validationById.getCategoryById(categoryId);
         categoryRepository.deleteById(categoryId);
     }
 
     public CategoryDto update(Integer catId, CategoryDto categoryDto) {
-        Category categoryById = categoryRepository.findById(catId)
-                .orElseThrow(() -> new EntityNotFoundException("Category with id=" + catId + " was not found"));
+        Category categoryById = validationById.getCategoryById(catId);
         if (categoryById.getName().equals(categoryDto.getName())) {
             return CategoryMapper.toCategoryDto(categoryById);
         }
         categoryById.setName(categoryDto.getName());
         Category updatedCategory = categoryRepository.save(categoryById);
         return CategoryMapper.toCategoryDto(updatedCategory);
-    }
-
-    public List<CategoryDto> getAll() {
-        return categoryRepository.findAll().stream()
-                .map(CategoryMapper::toCategoryDto)
-                .collect(Collectors.toList());
     }
 }

@@ -3,7 +3,6 @@ package ru.practicum.mainService.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.mainService.model.Comment;
 import ru.practicum.mainService.model.Location;
 
 import java.util.List;

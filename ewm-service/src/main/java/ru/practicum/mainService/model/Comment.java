@@ -3,8 +3,12 @@ package ru.practicum.mainService.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -16,7 +20,10 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false, length = 5000)
+    @NotBlank
+    @NotNull
+    @Size(min = 10, max = 5000)
+    @Column(nullable = false)
     private String text;
     @ManyToOne
     @JoinColumn(name = "author_id")
